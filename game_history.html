@@ -1,0 +1,42 @@
+<div data-role=page id=info data-add-back-btn=true>
+	<div data-role=header  data-add-back-btn=true>
+		<h1>Mistake Chasing Game</h1>
+	</div>
+	<div data-role=content>
+		<p class="text">GAME HISTORY</p>
+		<div class="horizontalRule">
+		</div>
+		<div style="margin: 0 auto; text-align: center">
+			<table>
+				<tr>
+					<td class="text">Time</td>
+					<td class="text">Result</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div data-role=footer  data-position="fixed">
+		<h1>Mistake Chasing Game (c) 2013</h1>
+	</div>
+	
+	<script>
+		var user_info = {
+			email:sessionStorage.getItem("email")
+		};
+		$.ajax({
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/game_history",
+		     dataType: 'jsonp',
+		     data: user_info,
+		     success: function(json){
+				 for (var i = 0; i < json.parameters.length; i++) {
+					var current_item = json.parameters[i];
+					$("table").append("<tr><td class='text' style='padding: 13px 10px;font-size: 15px;'>" + current_item.time + "</td><td class='text' style='padding: 13px 10px;font-size: 15px;'>" + current_item.score + "</td></tr>");
+				 }
+		     },
+		     error:function(){
+		         alert("Error");
+		     }      
+		});
+	</script>
+</div>
+ 

@@ -1,0 +1,29 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400);
+#rrr{
+
+font: normal 12px 'Open Sans', sans-serif;
+margin-top: 20px;
+}
+ul.countdown {
+list-style: none;
+margin: 15px 0;
+padding: 0;
+display: block;
+text-align: center;
+}
+ul.countdown li {
+display: inline-block;
+}
+ul.countdown li span {
+font-size: 50px;
+font-weight: 300;
+line-height: 80px;
+}
+ul.countdown li.seperator {
+font-size: 80px;
+line-height: 70px;
+vertical-align: top;
+}
+ul.countdown li p {
+color: #a7abb1;
+font-size: 14px;

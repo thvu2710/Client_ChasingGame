@@ -1,0 +1,42 @@
+<div data-role=page id=home>
+	<div data-role=header >
+		<h1>Mistake Chasing Game</h1>
+	</div>
+	<div data-role=content>
+		<p class="text">YOUR RESULT:</p>
+		<p class="text" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF QUESTIONS IN THIS TEST: 10 </p>
+		<p class="text" id="total" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF QUESTIONS THAT YOU ANSWERED: </p>
+		<p class="text" id="correct" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF CORRECT QUESTIONS: </p>
+
+		<p>
+			<a href=home.html data-role=button data-icon=back id="back_to_home"> BACK TO HOME </a>
+		</p>
+	</div>
+	<div data-role=footer  data-position="fixed" >
+		<h1>Mistake Chasing Game (c) 2013</h1>
+	</div>
+	<script>
+		var user_info = {
+			email: sessionStorage.getItem("email"),
+			total: sessionStorage.getItem("total")
+		};
+		$.ajax({
+			 url:"http://localhost:8080/FirstRestWS/rest/webservice/result",
+			 dataType: 'jsonp',
+			 data: user_info,
+			 success: function(json){
+				 if (json.statusCode == 4) {
+					$("#total").text($("#total").text() + sessionStorage.getItem("total"));
+					$("#correct").text($("#correct").text() + json.parameters[1]);
+				 } else {
+					 alert("ERROR");
+				 }
+			 },
+			 error:function(){
+				 alert("Error");
+			 }      
+		});
+	</script>
+</div>
+
+

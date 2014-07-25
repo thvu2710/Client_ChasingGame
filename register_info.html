@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>collapsible demo</title>
+	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+	<!-- css files -->
+	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="info.css">
+	<link rel="stylesheet" href="home.css">
+	<link rel="stylesheet" href="countdown_timer.css">
+	
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+</head>
+<body>
+<div data-role=dialog id=registerer_infor data-back-button=true>
+	<div data-role=header data-back-button=true>
+		<h1>INFORMATION</h1>
+		<a href=register_multiplayer.html rel=external class="ui-btn-left" data-role=button data-icon=back>Back</a>
+	</div>
+	<div data-role=content>
+		<div id="room_info">
+		
+		</div>
+		<ol data-role="listview" data-inset="true">
+			
+		</ol>
+		<br />
+		<a href=# data-role=button id=btnRegister>Register this room</a>
+	</div>
+	<script>
+		function parse(val) {
+			var result = "Not found",
+				tmp = [];
+			location.search
+			//.replace ( "?", "" ) 
+			// this is better, there might be a question mark inside
+			.substr(1)
+				.split("&")
+				.forEach(function (item) {
+				tmp = item.split("=");
+				if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			});
+			return result;
+		}
+		
+		var room_id = 0;
+		
+		function getRoomRegistererByRoomName(room_name) {
+			$.ajax({
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/room_registers",
+				 dataType: 'jsonp',
+				 data: {room_name:room_name},
+				 success: function(json){
+					var current_room = json.parameters[0];
+					room_id = current_room.id;
+					$("#room_info").append("<span>Room name: " + current_room.room_name + "</span><br />");
+					$("#room_info").append("<span>User created: " + current_room.user_created + "</span><br />");
+					$("#room_info").append("<span>Time created: " + current_room.time_created + "</span>");
+					var register_check = false;
+					for (var i = 0; i < current_room.register_list.length; i++) {
+						$("ol").append("<li>" + current_room.register_list[i] + "</li>");
+						if (current_room.register_list[i] == sessionStorage.getItem("email"))
+							register_check = true;
+					}
+					$("ol").listview('refresh');
+					
+					if (register_check == true) {
+						$("#btnRegister").addClass("ui-disabled");
+						$("#btnRegister").text("You have already registered this room");
+					}
+				 },
+				 error:function(){
+					 alert("Error");
+				 }      
+			});
+		}
+		
+		getRoomRegistererByRoomName(parse('room_name'));
+		
+		$("#btnRegister").bind ("click", function (event)
+		{	
+			//$.mobile.changePage ("gameplay.html?room_name=" + parse('room_name') + "&mode=multi");
+				var room_info = {
+					email:sessionStorage.getItem("email"),
+					room_id: room_id
+			};
+			
+			$.ajax({
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/register_room",
+				 dataType: 'jsonp',
+				 data: room_info,
+				 success: function(json){
+					if (json.statusCode == 1) {
+						$.mobile.changePage ("#error_infor");
+					 } else if(json.statusCode == 2){
+						$.mobile.changePage ("#success_infor");
+					 }
+				 },
+				 error:function(){
+					 alert("Error");
+				 }      
+			});
+			
+		});		
+	</script>
+</div>
+<div data-role=dialog id=error_infor data-back-button=true>
+	<div data-role=header data-back-button=true >
+		<h1>INFORMATION</h1>
+	</div>
+	<div data-role=content>
+		<p class="text">Register this room Failed </p>
+	</div>
+</div>
+<div data-role=dialog id=success_infor>
+	<div data-role=header  >
+		<h1>INFORMATION</h1>
+	</div>
+	<div data-role=content>
+		<p class="text">Register this room successfully </p>
+		<a href=register_multiplayer.html rel=external data-role=button data-icon=back>Back to room</a>
+	</div>
+</div>
+</body>
+</html>

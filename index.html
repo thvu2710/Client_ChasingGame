@@ -1,0 +1,97 @@
+<!-- Copyright (c) 2012 Mobile Developer Solutions -->
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
+
+	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+	<!-- css files -->
+	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="info.css">
+	<link rel="stylesheet" href="home.css">
+	<link rel="stylesheet" href="countdown_timer.css">
+	
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<style type=text/css>
+		/* style for text */
+		.text {
+			color: #000000;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+			padding: 13px 20px;
+			font-size: 19px;
+			margin: 0px auto;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div data-role=page id=index>
+		<div data-role=header >
+			<h1>Mistake Chasing Game</h1>
+			<a href=info.html data-role=button class="ui-btn-right" data-icon=info> Info </a>
+			<a href=# data-role=button class="ui-btn-left" data-icon=back id="exit"> Exit </a>
+		</div>
+		<div data-role=content>
+			<p class="text">SIGN IN TO YOUR ACCOUNT</p>
+			<p>
+				<input type=text placeholder="Enter Email" id="tfEmail">
+			</p>
+			<p>
+				<input type=password placeholder="Enter Password" id="pfPassword">
+			</p>
+			<p>
+				<a href=# data-role=button data-theme=e data-icon=check id=signin> SIGN IN
+				</a>
+			</p>
+			<p class="text" style="font-size: 15px;"><a href="reset_password.html" style="text-decoration: none; color: #d10000;" >Forgot
+				Password?</a></p>
+			<p>
+				<a href=signup.html data-role=button data-icon=plus> SIGN UP NEW ACCOUNT </a>
+			</p>
+		</div>
+		<div data-role=footer  data-position="fixed">
+			<h1>Mistake Chasing Game (c) 2013</h1>
+		</div>
+	</div>
+</body>
+<script>
+	$("#exit").bind ("click", function (event)
+	{
+	  navigator.app.exitApp();
+	});
+	
+	$("#signin").bind ("click", function (event)
+	{
+	
+		if ($("#tfEmail").val().length == 0 || $("#pfPassword").val().length == 0) {
+			alert("Email or password must not be empty");
+			return;
+		}
+		var user_info = {
+			email: $("#tfEmail").val(),
+	        password:$("#pfPassword").val()
+		};
+		
+		$.ajax({
+			 url:"http://localhost:8080/FirstRestWS/rest/webservice/login",
+			 dataType: 'jsonp',
+			 data: user_info,
+			 success: function(json){
+				 if (json.message == "true") {
+					 sessionStorage.setItem("email", $("#tfEmail").val());
+					 sessionStorage.setItem("password", $("#pfPassword").val());
+					 $.mobile.changePage ("home.html");
+				 } else {
+					 $.mobile.changePage ("error_infor.html");
+				 }
+			 },
+			 error:function(){
+				 alert("Error");
+			 }      
+		});
+	});
+</script>
+</html>
