@@ -123,7 +123,7 @@
 			email: sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/game_starter",
+		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/game_starter",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -155,7 +155,7 @@
 		};
 		
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/gameplay",
+		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/gameplay",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -190,7 +190,7 @@
 		};
 		
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/gameplay_getnextonly",
+		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/gameplay_getnextonly",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -216,16 +216,19 @@
 		     }      
 		});
 	};
-	
+	var check = false;
 	$("#next_question").bind("click", function() {
-		loadNextQuestion();
+		if(check==false){
+			check=true;
+			loadNextQuestion();
+		}
 	});
 	
 	loadFirstQuestion();
 	var i = 0;
 	function frequentlyChecking() {
 		$.ajax({
-			 url:"http://localhost:8080/FirstRestWS/rest/webservice/temp_play_history",
+			 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/temp_play_history",
 			 dataType: 'jsonp',
 			 data: {client_current_question_order: client_current_question_order},
 			 success: function(json){
@@ -238,9 +241,11 @@
 					$("#b" + client_current_question_order).buttonMarkup({ icon: "delete" });
 					$("#b" + client_current_question_order).css('background-color', 'red');
 				}
+				check=false;
 			 },
 			 error:function(){
 				 alert("Error2");
+				 check=false;
 			 }
 		});
 	};

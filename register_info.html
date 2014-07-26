@@ -51,7 +51,7 @@
 		
 		function getRoomRegistererByRoomName(room_name) {
 			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/room_registers",
+				 url:"mistake-chasinggame.rhcloud.com/rest/webservice/room_registers",
 				 dataType: 'jsonp',
 				 data: {room_name:room_name},
 				 success: function(json){
@@ -90,7 +90,7 @@
 			};
 			
 			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/register_room",
+				 url:"mistake-chasinggame.rhcloud.com/rest/webservice/register_room",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){

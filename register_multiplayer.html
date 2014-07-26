@@ -60,7 +60,7 @@
 			};
 			
 			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/create_room",
+				 url:"mistake-chasinggame.rhcloud.com/rest/webservice/create_room",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){
@@ -83,7 +83,7 @@
 		
 		function getAvailableRoom() {
 			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/available_room",
+				 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/available_room",
 				 dataType: 'jsonp',
 				 success: function(json){
 					$("ol").text("");
