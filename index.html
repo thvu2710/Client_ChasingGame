@@ -74,12 +74,13 @@
 			email: $("#tfEmail").val(),
 	        password:$("#pfPassword").val()
 		};
-		
+		alert("dang dang nhap");
 		$.ajax({
 			 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/login",
 			 dataType: 'jsonp',
 			 data: user_info,
 			 success: function(json){
+			 	alert("nhan ket qua");
 				 if (json.message == "true") {
 					 sessionStorage.setItem("email", $("#tfEmail").val());
 					 sessionStorage.setItem("password", $("#pfPassword").val());
