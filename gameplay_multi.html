@@ -1,0 +1,240 @@
+<!-- Copyright (c) 2012 Mobile Developer Solutions -->
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
+
+	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+	<!-- css files -->
+	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="info.css">
+	<link rel="stylesheet" href="home.css">
+	<link rel="stylesheet" href="countdown_timer.css">
+	
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<style type=text/css>
+		/* style for text */
+		.text {
+			color: #000000;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+			padding: 13px 20px;
+			font-size: 19px;
+			margin: 0px auto;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div data-role=page data-dom-cache="false" id=home>
+	<div data-role=header  data-add-back-btn=true>
+		<h1>Mistake Chasing Game</h1>
+	</div>
+	<div data-role=content id="rrr">
+	<ul class="back countdown">
+		<li> <span class="hours">00</span>
+			<p class="hours_ref">hours</p>
+		</li>
+		<li class="seperator">:</li>
+		<li> <span class="minutes">00</span>
+			<p class="minutes_ref">minutes</p>
+		</li>
+		<li class="seperator">:</li>
+		<li> <span class="seconds">00</span>
+			<p class="seconds_ref">seconds</p>
+		</li>
+	</ul>
+		<p class="text" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;" id="question_number" >Question</p>
+		<textarea style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Put Text here</textarea>
+		<span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px"> Choose the true answer : </span>
+		<select data-native-menu=false id="select">
+		</select>
+		<p>
+			<a href=# data-role=button data-theme=e data-icon=check id=next_question> Next Question
+			</a>
+		</p>
+		<div id=question_status_list style = "margin: 0 auto">
+			
+		</div>
+	</div>
+	<div data-role=footer  data-position="fixed">
+		<h1>Mistake Chasing Game (c) 2013</h1>
+	</div>
+
+	<div data-role="popup" id="popupBasic">
+		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+		<p>Question ? <br />answered by ?</br>at ?<p>
+	</div>
+	<script>
+	//add 10 button to present 10 question status if current game play mode is multi...
+		for (var i = 1; i <= 10; i++) {
+			$("#question_status_list").append("<a href=# data-rel=popup data-role=button data-theme=e data-icon=info data-inline=true id=b" + i + ">" + i + "</a>");
+		}
+	
+	var total_my_question = 0;
+	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
+	var seconds = 300;
+	var countdownTimer;
+	var countdownTimer2;
+	
+	var room_id = sessionStorage.getItem("room_id");
+
+	function secondPassed() {
+		var minutes = Math.round((seconds - 30)/60);
+		var remainingSeconds = seconds % 60;
+		if (remainingSeconds < 10) {
+			remainingSeconds = "0" + remainingSeconds; 
+		}
+		if (minutes < 10) {
+			minutes = "0" + minutes;
+		}
+		$(".minutes").text(minutes);
+		$(".seconds").text(remainingSeconds);
+		if (seconds == 0) {
+			clearInterval(countdownTimer);
+			$.mobile.changePage ("result_multi.html");
+			sessionStorage.setItem("total", total_my_question);
+		} else {
+			seconds--;
+		}
+	};
+	
+	//first load question after showing gameplay page
+	loadFirstQuestion = function() {
+		var question_info = {
+			email: sessionStorage.getItem("email"),
+			room_id: room_id
+		};
+		$.ajax({
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/game_starter",
+		     dataType: 'jsonp',
+			 data: question_info,
+		     success: function(json){
+				var question = json.parameters[0];
+				client_current_question_order = question.id;
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question").text(question.question);
+		    	var str = question.answer_list.split(" ");
+		    	for (var i = 0; i < str.length; i++) {
+		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+		    	}
+		    	$("#select").selectmenu("refresh", true);
+		    	countdownTimer = setInterval('secondPassed()', 1000);
+		     },
+		     error:function(){ //khoi tao lan dau bi loi, hoac reset lai session browser cung bi loi
+		         alert("Error0");
+		     }      
+		});
+	};
+	
+	//get current question and answer that user input
+	
+	//load question for next
+	loadNextQuestion = function() {
+		var question_info = {
+			email: sessionStorage.getItem("email"),
+			current_question_order: client_current_question_order,
+			answer:$("#select").val()
+		};
+		
+		$.ajax({
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/gameplay",
+		     dataType: 'jsonp',
+			 data: question_info,
+		     success: function(json){
+		    	if (json.statusCode == 3) {
+					clearInterval(countdownTimer);
+					clearInterval(countdownTimer2);
+		    		$.mobile.changePage ("result_multi.html");
+					sessionStorage.setItem("total", total_my_question);
+		    		return;
+		    	}
+				var question = json.parameters[0];
+				client_current_question_order = question.id;
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question").text(question.question);
+		    	var str = question.answer_list.split(" ");
+				$("#select").html("");
+		    	for (var i = 0; i < str.length; i++) {
+		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+		    	}
+		    	$("#select").selectmenu("refresh", true);
+		     },
+		     error:function(){
+		         alert("Error1");
+		     }      
+		});
+	};
+	
+	//load next question only
+	loadNextQuestionOnly = function() {
+		var question_info = {
+			email: sessionStorage.getItem("email"),
+			current_question_order: client_current_question_order
+		};
+		
+		$.ajax({
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/gameplay_getnextonly",
+		     dataType: 'jsonp',
+			 data: question_info,
+		     success: function(json){
+		    	if (json.parameters[0].length == 0) {
+					clearInterval(countdownTimer);
+					clearInterval(countdownTimer2);
+		    		$.mobile.changePage ("result_multi.html");
+					sessionStorage.setItem("total", total_my_question);
+		    		return;
+		    	}
+
+				var question = json.parameters[0];
+				client_current_question_order = question.id;
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question").text(question.question);
+		    	var str = question.answer_list.split(" ");
+				$("#select").html("");
+		    	for (var i = 0; i < str.length; i++) {
+		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+		    	}
+		    	$("#select").selectmenu("refresh", true);
+		     },
+		     error:function(){
+		         alert("Error1");
+		     }      
+		});
+	};
+	
+	$("#next_question").bind("click", function() {
+		loadNextQuestion();
+	});
+	
+	loadFirstQuestion();
+	var i = 0;
+	function frequentlyChecking() {
+		$.ajax({
+			 url:"http://localhost:8080/FirstRestWS/rest/webservice/temp_play_history",
+			 dataType: 'jsonp',
+			 data: {client_current_question_order: client_current_question_order},
+			 success: function(json){
+				if (json.statusCode == 1) {
+					//next question
+					loadNextQuestionOnly();
+					alert("This question has been already answered by another one, you will be answered other question");
+					//$("#b" + client_current_question_order).buttonMarkup({ icon: "check" });
+					//$("#b" + client_current_question_order).css('background-color', 'green');
+				} else if (json.statusCode == 0) {
+					//$("#b" + client_current_question_order).buttonMarkup({ icon: "delete" });
+					//$("#b" + client_current_question_order).css('background-color', 'red');
+				}
+			 },
+			 error:function(){
+				 alert("Error2");
+			 }
+		});
+	};
+	countdownTimer2 = setInterval('frequentlyChecking()', 5000);
+</script>
+</div>
+</body>
+</html>

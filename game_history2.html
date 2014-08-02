@@ -7,13 +7,23 @@
 		<div class="horizontalRule">
 		</div>
 		<div style="margin: 0 auto; text-align: center">
-			<table>
-				<tr>
-					<td class="text">Time</td>
-					<td class="text">Result</td>
-					<td class="text">Your answer</td>
-				</tr>
-			</table>
+		
+		<table data-role="table" id="movie-table" data-mode="reflow" class="ui-responsive table-stroke">
+		   <thead>
+			  <tr>
+				 <th>Time</th>
+				 <th>Result</th>
+				 <th>Your answer</th>
+			  </tr>
+		   </thead>
+		   <tbody>
+			  <tr>
+				 <td>1941</td>
+				 <td>100%</td>
+				 <td>74</td>
+			  </tr>
+		   </tbody>
+		</table>
 		</div>
 	</div>
 	<div data-role=footer  data-position="fixed">
@@ -31,8 +41,9 @@
 		     success: function(json){
 				 for (var i = 0; i < json.parameters.length; i++) {
 					var current_item = json.parameters[i];
-					$("table").append("<tr><td class='text' style='padding: 13px 10px;font-size: 15px;'>" + new Date(current_item.timestamp) + "</td><td class='text' style='padding: 13px 10px;font-size: 15px;'>" + current_item.score + "</td><td><a rel=external data-role=button href=viewexamdetail.html?timestamp=" + current_item.timestamp + ">View Detail </a></td></tr>");
+					$("tbody").append("<tr><td>1941</td><td>100%</td><td>74</td></tr>");
 				 }
+				 $("table").table( "refresh" );
 		     },
 		     error:function(){
 		         alert("Error");

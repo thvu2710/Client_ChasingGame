@@ -53,7 +53,7 @@
 			</tr>
 		</table>
 		<p>
-			<a href="gameplay.html?mode=single" rel=external data-role=button data-theme=e data-icon=check> START A SINGLEPLAYER GAME </a>
+			<a href="gameplay.html" data-role=button data-theme=e data-icon=check> START A SINGLEPLAYER GAME </a>
 			<a href=register_multiplayer.html rel=external data-role=button data-theme=e data-icon=check> REGISTER FOR A MULTIPLAYER GAME</a>
 		</p>
 	</div>
@@ -65,7 +65,7 @@
 			email:sessionStorage.getItem("email"),
 		};
 		$.ajax({
-		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/home",
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/home",
 		     dataType: 'jsonp',
 		     data: user_info,
 		     success: function(json){
@@ -79,7 +79,7 @@
 				 var result = parameters[1];
 				 if (result != null) {
 					 $("#best_score").text(result.score);
-					 $("#last_play").text(result.time);
+					 $("#last_play").text(new Date(result.timestamp));
 				} else {
 					$("#best_score").text("N/A");
 					$("#last_play").text("N/A");

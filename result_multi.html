@@ -4,9 +4,12 @@
 	</div>
 	<div data-role=content>
 		<p class="text">YOUR RESULT:</p>
-		<ol data-role="listview" data-inset="true">
-			
-		</ol>
+		<p class="text" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF QUESTIONS IN THIS TEST: 10 </p>
+		<p class="text" id="correct" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF CORRECT QUESTIONS: </p>
+
+		<p>
+			<a href=home.html data-role=button data-icon=back id="back_to_home"> BACK TO HOME </a>
+		</p>
 	</div>
 	<div data-role=footer  data-position="fixed" >
 		<h1>Mistake Chasing Game (c) 2013</h1>
@@ -14,16 +17,17 @@
 	<script>
 		var user_info = {
 			email: sessionStorage.getItem("email"),
-			total: sessionStorage.getItem("total")
+			total: sessionStorage.getItem("total"),
+			room_name: sessionStorage.getItem("room_name"),
+			room_id: sessionStorage.getItem("room_id")
 		};
 		$.ajax({
-			 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/result_multi",
+			 url:"http://localhost:8080/FirstRestWS/rest/webservice/result_multi",
 			 dataType: 'jsonp',
 			 data: user_info,
 			 success: function(json){
-				 if (json.success == 4) {
-					$("#total").text($("#total").text() + sessionStorage.getItem("total"));
-					$("#correct").text($("#correct").text() + json.score);
+				 if (json.statusCode == 0) {
+					$("#correct").text($("#correct").text() + json.parameters[1]);
 				 } else {
 					 alert("ERROR");
 				 }

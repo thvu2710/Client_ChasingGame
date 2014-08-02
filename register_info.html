@@ -16,7 +16,7 @@
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
 </head>
 <body>
-<div data-role=dialog id=registerer_infor data-back-button=true>
+<div data-role=page id=registerer_infor data-back-button=true>
 	<div data-role=header data-back-button=true>
 		<h1>INFORMATION</h1>
 		<a href=register_multiplayer.html rel=external class="ui-btn-left" data-role=button data-icon=back>Back</a>
@@ -29,7 +29,7 @@
 			
 		</ol>
 		<br />
-		<a href=# data-role=button id=btnRegister>Register this room</a>
+		<a href=# data-role=button id=btnRegister>Start Game</a>
 	</div>
 	<script>
 		function parse(val) {
@@ -46,31 +46,105 @@
 			});
 			return result;
 		}
-		
 		var room_id = 0;
 		
-		function getRoomRegistererByRoomName(room_name) {
+		var countdownTimer2;
+		var countdownTimer3;
+		function waitRoomStartFrequentlyChecking() {
 			$.ajax({
-				 url:"mistake-chasinggame.rhcloud.com/rest/webservice/room_registers",
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/room_started",
 				 dataType: 'jsonp',
-				 data: {room_name:room_name},
+				 data: {room_id: room_id},
+				 success: function(json){
+					if (json.statusCode == 1) {
+						//change to gameplay_multi page
+						clearInterval(countdownTimer2);
+						$.mobile.changePage ("gameplay_multi.html");
+					} else if (json.statusCode == 0) {
+						
+					} else if (json.statusCode == 2) {
+						clearInterval(countdownTimer2);
+					}
+				 },
+				 error:function(){
+					 alert("Error2");
+				 }
+			});
+		};
+
+		function waitEnoughRegisterFrequentlyChecking() {
+			$.ajax({
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/enough_register_room_started",
+				 dataType: 'jsonp',
+				 data: {room_id: room_id},
 				 success: function(json){
 					var current_room = json.parameters[0];
-					room_id = current_room.id;
+					if (current_room.register_list.length > 1) {
+						$("#btnRegister").text("Start Game");
+						$("#btnRegister").removeClass("ui-disabled");
+						$("#btnRegister").addClass("ui-enabled");
+					} else if (current_room.register_list.length <= 1) {
+						$("#btnRegister").text("Not Enough Registers, Cannot Start Game");
+						$("#btnRegister").removeClass("ui-enabled");
+						$("#btnRegister").addClass("ui-disabled");
+					}
+					$("ol").text("");
+					for (var i = 0; i < current_room.register_list.length; i++) {
+						$("ol").append("<li>" + current_room.register_list[i] + "</li>");
+					}
+					$("ol").listview('refresh');
+				 },
+				 error:function(){
+					 alert("Error2");
+				 }
+			});
+		};
+		
+		
+		function getRoomRegistererByRoomName(room_name, room_name_save) {
+			var current_room_name = "";
+			if (room_name != "Not found")
+				current_room_name = room_name;
+			else
+				current_room_name = room_name_save;
+				
+			$.ajax({
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/room_registers",
+				 dataType: 'jsonp',
+				 data: {room_name:current_room_name},
+				 success: function(json){
+					var current_room = json.parameters[0];
+					room_id = current_room.time_created;
+					sessionStorage.setItem('room_name', current_room.room_name);
+					sessionStorage.setItem('room_id', room_id);
 					$("#room_info").append("<span>Room name: " + current_room.room_name + "</span><br />");
 					$("#room_info").append("<span>User created: " + current_room.user_created + "</span><br />");
-					$("#room_info").append("<span>Time created: " + current_room.time_created + "</span>");
-					var register_check = false;
+					$("#room_info").append("<span>Time created: " + new Date(current_room.time_created) + "</span>");
+					
+					var check = false;
 					for (var i = 0; i < current_room.register_list.length; i++) {
 						$("ol").append("<li>" + current_room.register_list[i] + "</li>");
 						if (current_room.register_list[i] == sessionStorage.getItem("email"))
-							register_check = true;
+							check = true;
 					}
 					$("ol").listview('refresh');
 					
-					if (register_check == true) {
-						$("#btnRegister").addClass("ui-disabled");
-						$("#btnRegister").text("You have already registered this room");
+					if (check == false) {
+						$("#btnRegister").addClass("ui-enabled");
+						$("#btnRegister").text("Register this room");
+					} else {
+						if (current_room.user_created == sessionStorage.getItem("email") && current_room.register_list.length >= 2) {
+							$("#btnRegister").addClass("ui-enabled");
+							$("#btnRegister").text("Start Game");
+						} else if (current_room.user_created == sessionStorage.getItem("email") && current_room.register_list.length < 2) {
+							$("#btnRegister").addClass("ui-disabled");
+							$("#btnRegister").text("Not Enough Registers, Cannot Start Game");
+							countdownTimer3 = setInterval('waitEnoughRegisterFrequentlyChecking()', 5000);
+						} else if (current_room.user_created != sessionStorage.getItem("email")) {
+							$("#btnRegister").addClass("ui-disabled");
+							$("#btnRegister").text("Please wait for the room owner start game...");
+							countdownTimer2 = setInterval('waitRoomStartFrequentlyChecking()', 5000);
+						}
 					}
 				 },
 				 error:function(){
@@ -79,32 +153,61 @@
 			});
 		}
 		
-		getRoomRegistererByRoomName(parse('room_name'));
+		getRoomRegistererByRoomName(parse('room_name'), sessionStorage.getItem('room_name'));
 		
-		$("#btnRegister").bind ("click", function (event)
-		{	
-			//$.mobile.changePage ("gameplay.html?room_name=" + parse('room_name') + "&mode=multi");
-				var room_info = {
-					email:sessionStorage.getItem("email"),
-					room_id: room_id
+		function setRoomStatus(my_room_id, started) {
+			var room_info = {
+				started: started,
+				room_id: my_room_id
 			};
-			
 			$.ajax({
-				 url:"mistake-chasinggame.rhcloud.com/rest/webservice/register_room",
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/set_room_started",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){
-					if (json.statusCode == 1) {
-						$.mobile.changePage ("#error_infor");
-					 } else if(json.statusCode == 2){
-						$.mobile.changePage ("#success_infor");
-					 }
+				 //change to gameplay_multi page
+				$.mobile.changePage ("gameplay_multi.html");
 				 },
 				 error:function(){
 					 alert("Error");
 				 }      
 			});
+		}
+		
+		$("#btnRegister").bind ("click", function (event)
+		{	
+			if ($("#btnRegister").text() == "Start Game") {
+				//set current room id
+				sessionStorage.setItem("room_id", room_id);
+				
+				//inform server to change room started status
+				setRoomStatus(room_id, 1);
+				clearInterval(countdownTimer3);
+			} else if ($("#btnRegister").text() == "Register this room") {
+				var room_info = {
+					email:sessionStorage.getItem("email"),
+					room_id: room_id
+				};
 			
+				$.ajax({
+					 url:"http://localhost:8080/FirstRestWS/rest/webservice/register_room",
+					 dataType: 'jsonp',
+					 data: room_info,
+					 success: function(json){
+						if (json.statusCode == 1) {
+							$.mobile.changePage ("#error_infor");
+						 } else if(json.statusCode == 2){
+							sessionStorage.setItem("room_name", parse('room_name'));
+							$.mobile.changePage ("#success_infor");
+						 }
+					 },
+					 error:function(){
+						 alert("Error");
+					 }      
+				});
+			} else {
+				alert("Invalid status");
+			}
 		});		
 	</script>
 </div>
@@ -122,7 +225,7 @@
 	</div>
 	<div data-role=content>
 		<p class="text">Register this room successfully </p>
-		<a href=register_multiplayer.html rel=external data-role=button data-icon=back>Back to room</a>
+		<a href=register_info.html rel=external data-role=button data-icon=back>Back to room info</a>
 	</div>
 </div>
 </body>

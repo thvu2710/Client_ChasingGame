@@ -68,37 +68,8 @@
 		<p>Question ? <br />answered by ?</br>at ?<p>
 	</div>
 	<script>
-	
-	function parse(val) {
-		var result = "Not found",
-			tmp = [];
-		location.search
-		//.replace ( "?", "" ) 
-		// this is better, there might be a question mark inside
-		.substr(1)
-			.split("&")
-			.forEach(function (item) {
-			tmp = item.split("=");
-			if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
-		});
-		return result;
-	}
-	
-	alert("Current mode: " + parse('mode'));
-	
-	//add 10 button to present 10 question status if current game play mode is multi...
-	if (parse('mode') != 'single') {
-		for (var i = 1; i <= 10; i++) {
-			$("#question_status_list").append("<a href=# data-rel=popup data-role=button data-theme=e data-icon=info data-inline=true id=b" + i + ">" + i + "</a>");
-		}
-	}
-	
-	var total_my_question = 0;
-	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
-	var seconds = 300;
 	var countdownTimer;
-	var countdownTimer2;
-
+	var seconds = 300;
 	function secondPassed() {
 		var minutes = Math.round((seconds - 30)/60);
 		var remainingSeconds = seconds % 60;
@@ -112,24 +83,32 @@
 		$(".seconds").text(remainingSeconds);
 		if (seconds == 0) {
 			clearInterval(countdownTimer);
+			$.mobile.changePage ("result.html");
 		} else {
 			seconds--;
 		}
 	};
 	
-	//first load question after showing gameplay page
-	loadFirstQuestion = function() {
+	//first load all question after showing gameplay page
+	var exam_question_list;
+	var exam_id;
+	var total_my_question = 0;
+	var question_index;
+	
+	loadAllQuestion = function() {
 		var question_info = {
 			email: sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/game_starter",
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/single_play",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
-				var question = json.parameters[0];
-				client_current_question_order = question.id;
+				exam_question_list = json.parameters;
+				var question = exam_question_list[0];
+				
 		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+				question_index = question.id;
 		    	$("#question").text(question.question);
 		    	var str = question.answer_list.split(" ");
 		    	for (var i = 0; i < str.length; i++) {
@@ -138,121 +117,56 @@
 		    	$("#select").selectmenu("refresh", true);
 		    	countdownTimer = setInterval('secondPassed()', 1000);
 		     },
-		     error:function(){ //khoi tao lan dau bi loi, hoac reset lai session browser cung bi loi
+		     error:function(){
 		         alert("Error0");
 		     }      
 		});
 	};
-	
-	//get current question and answer that user input
-	
+	loadAllQuestion();
+
+	var totalanswer_string = "";
+	//var array = [];
 	//load question for next
 	loadNextQuestion = function() {
-		var question_info = {
-			email: sessionStorage.getItem("email"),
-			current_question_order: client_current_question_order,
-			answer:$("#select").val()
-		};
-		
-		$.ajax({
-		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/gameplay",
-		     dataType: 'jsonp',
-			 data: question_info,
-		     success: function(json){
-		    	if (json.statusCode == 3) {
-					clearInterval(countdownTimer);
-		    		$.mobile.changePage ("result.html");
-					sessionStorage.setItem("total", total_my_question);
-		    		return;
-		    	}
-				var question = json.parameters[0];
-				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
-		    	$("#question").text(question.question);
-		    	var str = question.answer_list.split(" ");
-				$("#select").html("");
-		    	for (var i = 0; i < str.length; i++) {
-		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-		    	}
-		    	$("#select").selectmenu("refresh", true);
-		     },
-		     error:function(){
-		         alert("Error1");
-		     }      
-		});
-	};
-	
-	//load next question only
-	loadNextQuestionOnly = function() {
-		var question_info = {
-			email: sessionStorage.getItem("email"),
-			current_question_order: client_current_question_order
-		};
-		
-		$.ajax({
-		     url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/gameplay_getnextonly",
-		     dataType: 'jsonp',
-			 data: question_info,
-		     success: function(json){
-		    	if (json.statusCode == 3) {
-					clearInterval(countdownTimer);
-		    		$.mobile.changePage ("result.html");
-					sessionStorage.setItem("total", total_my_question);
-		    		return;
-		    	}
-				var question = json.parameters[0];
-				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
-		    	$("#question").text(question.question);
-		    	var str = question.answer_list.split(" ");
-				$("#select").html("");
-		    	for (var i = 0; i < str.length; i++) {
-		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-		    	}
-		    	$("#select").selectmenu("refresh", true);
-		     },
-		     error:function(){
-		         alert("Error1");
-		     }      
-		});
-	};
-	var check = false;
-	$("#next_question").bind("click", function() {
-		if(check==false){
-			check=true;
-			loadNextQuestion();
-		}
-	});
-	
-	loadFirstQuestion();
-	var i = 0;
-	function frequentlyChecking() {
-		$.ajax({
-			 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/temp_play_history",
-			 dataType: 'jsonp',
-			 data: {client_current_question_order: client_current_question_order},
-			 success: function(json){
-				if (json.statusCode == 1) {
-					//next question
-					loadNextQuestionOnly();
-					$("#b" + client_current_question_order).buttonMarkup({ icon: "check" });
-					$("#b" + client_current_question_order).css('background-color', 'green');
-				} else if (json.statusCode == 0) {
-					$("#b" + client_current_question_order).buttonMarkup({ icon: "delete" });
-					$("#b" + client_current_question_order).css('background-color', 'red');
+		//var obj = {question_index:question_index,
+		//			answer:$("#select").val()};
+		//array.push(obj);
+		totalanswer_string += question_index + "," + $("#select").val() + " ";
+		if (total_my_question <= 9) {
+			var question = exam_question_list[total_my_question];
+			question_index = question.id;
+			$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+			$("#question").text(question.question);
+			var str = question.answer_list.split(" ");
+			$("#select").html("");
+			for (var i = 0; i < str.length; i++) {
+				$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+			}
+			$("#select").selectmenu("refresh", true);
+		} else {
+			//change page
+			$.ajax({
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/single_play",
+				 dataType: 'jsonp',
+				 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
+				 success: function(json){
+					if (json.statusCode == 0) {
+						clearInterval(countdownTimer);
+						$.mobile.changePage ("result.html");
+					} else {
+						alert("error when save your score");
+						clearInterval(countdownTimer);
+						$.mobile.changePage ("home.html");
+					}
 				}
-				check=false;
-			 },
-			 error:function(){
-				 alert("Error2");
-				 check=false;
-			 }
-		});
-	};
-	countdownTimer2 = setInterval('frequentlyChecking()', 5000);
-	
+			});
 
-	
+		}
+	};
+	//when user tap next question button
+	$("#next_question").bind("click", function() {
+		loadNextQuestion();
+	});
 </script>
 </div>
 </body>

@@ -60,19 +60,16 @@
 			};
 			
 			$.ajax({
-				 url:"mistake-chasinggame.rhcloud.com/rest/webservice/create_room",
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/create_room",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){
-					if (json.statusCode == 1) {
-						$.mobile.changePage ("#error_infor");
-					 } else if(json.statusCode == 2){
-						$.mobile.changePage ("#success_infor");
-					 }
+					sessionStorage.setItem('room_name', $("#tfName").val());
+					$.mobile.changePage ("register_info.html");
 				 },
 				 error:function(){
 					 alert("Error");
-				 }      
+				 }
 			});
 		});
 		
@@ -83,7 +80,7 @@
 		
 		function getAvailableRoom() {
 			$.ajax({
-				 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/available_room",
+				 url:"http://localhost:8080/FirstRestWS/rest/webservice/available_room",
 				 dataType: 'jsonp',
 				 success: function(json){
 					$("ol").text("");
@@ -111,22 +108,6 @@
 	</script>
 	<div data-role=footer data-position="fixed">
 		<h1>Mistake Chasing Game (c) 2013</h1>
-	</div>
-</div>
-<div data-role=dialog id=error_infor>
-	<div data-role=header  >
-		<h1>INFORMATION</h1>
-	</div>
-	<div data-role=content>
-		<p class="text">Room has been created, no need to create newly</p>
-	</div>
-</div>
-<div data-role=dialog id=success_infor>
-	<div data-role=header  >
-		<h1>INFORMATION</h1>
-	</div>
-	<div data-role=content>
-		<p class="text">Room has been created newly and user has been registered successfully</p>
 	</div>
 </div>
 </body>

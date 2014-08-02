@@ -5,7 +5,6 @@
 	<div data-role=content>
 		<p class="text">YOUR RESULT:</p>
 		<p class="text" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF QUESTIONS IN THIS TEST: 10 </p>
-		<p class="text" id="total" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF QUESTIONS THAT YOU ANSWERED: </p>
 		<p class="text" id="correct" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF CORRECT QUESTIONS: </p>
 
 		<p>
@@ -17,24 +16,18 @@
 	</div>
 	<script>
 		var user_info = {
-			email: sessionStorage.getItem("email"),
-			total: sessionStorage.getItem("total")
+			email: sessionStorage.getItem("email")
 		};
 		$.ajax({
-			 url:"http://mistake-chasinggame.rhcloud.com/rest/webservice/result",
+			 url:"http://localhost:8080/FirstRestWS/rest/webservice/result",
 			 dataType: 'jsonp',
 			 data: user_info,
 			 success: function(json){
-				 if (json.statusCode == 4) {
-					$("#total").text($("#total").text() + sessionStorage.getItem("total"));
-					$("#correct").text($("#correct").text() + json.parameters[1]);
-				 } else {
-					 alert("ERROR");
-				 }
+				$("#correct").text($("#correct").text() + json.parameters[0].score);
 			 },
 			 error:function(){
 				 alert("Error");
-			 }      
+			 }
 		});
 	</script>
 </div>
