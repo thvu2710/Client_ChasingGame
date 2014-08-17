@@ -6,15 +6,11 @@
 	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
 
 	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<!-- css files -->
-	<link rel="stylesheet" href="index.css">
-	<link rel="stylesheet" href="info.css">
-	<link rel="stylesheet" href="home.css">
-	<link rel="stylesheet" href="countdown_timer.css">
-	
 	<script src="jquery-1.10.2.min.js"></script>
 	<script src="jquery.mobile-1.4.2.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 	<style type=text/css>
 		/* style for text */
 		.text {
@@ -25,12 +21,100 @@
 			margin: 0px auto;
 			text-align: center;
 		}
+		
+		body {
+			background-color: "#f0eff6";
+		}
+		.rightMenu {
+			position: absolute;
+			top:-10%;   
+			right:-2%;
+			width: 100px !important;
+		}
+
+		.rightMenu .ui-collapsible-content .ui-listview {
+			margin: -10px -15px -10px -35px !important;
+		}
+		.horizontalRule {
+			min-height: 1px;
+			clear:both; width:100%;
+			border-bottom:1px solid #d1d1d1;
+			height:1px; 
+			padding-top:2px;
+			margin-bottom:10px;
+		}
+		
+		table{
+			border:none;
+			border-spacing:25px 8px;
+		}
+		
+		#rrr{
+			font: normal 12px 'Open Sans', sans-serif;
+			margin-top: 20px;
+		}
+		ul.countdown {
+			list-style: none;
+			margin: 15px 0;
+			padding: 0;
+			display: block;
+			text-align: center;
+		}
+		ul.countdown li {
+			display: inline-block;
+		}
+		ul.countdown li span {
+			font-size: 50px;
+			font-weight: 300;
+			line-height: 80px;
+		}
+		ul.countdown li.seperator {
+			font-size: 80px;
+			line-height: 70px;
+			vertical-align: top;
+		}
+		ul.countdown li p {
+			color: #a7abb1;
+			font-size: 14px;
+		}
+		
+		#rrr{
+
+font: normal 12px 'Open Sans', sans-serif;
+margin-top: 20px;
+}
+ul.countdown {
+list-style: none;
+margin: 15px 0;
+padding: 0;
+display: block;
+text-align: center;
+}
+ul.countdown li {
+display: inline-block;
+}
+ul.countdown li span {
+font-size: 50px;
+font-weight: 300;
+line-height: 80px;
+}
+ul.countdown li.seperator {
+font-size: 80px;
+line-height: 70px;
+vertical-align: top;
+}
+ul.countdown li p {
+color: #a7abb1;
+font-size: 14px;
+}
+
 	</style>
 </head>
 <body>
 <div data-role=page data-dom-cache="false" id=home>
 	<div data-role=header  data-add-back-btn=true>
 		<h1>Mistake Chasing Game</h1>
+		<a href=home.html data-role=button class="ui-btn-left" data-icon=back> Back </a>
 	</div>
 	<div data-role=content id="rrr">
 	<ul class="back countdown">
@@ -47,7 +131,7 @@
 		</li>
 	</ul>
 		<p class="text" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;" id="question_number" >Question</p>
-		<textarea style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Put Text here</textarea>
+		<textarea cols="40" rows="5" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</textarea>
 		<span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px"> Choose the true answer : </span>
 		<select data-native-menu=false id="select">
 		</select>
@@ -68,8 +152,26 @@
 		<p>Question ? <br />answered by ?</br>at ?<p>
 	</div>
 	<script>
+	
+	//document.addEventListener("deviceready", onDeviceReady, false);
+    /** function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+        
+        mp3file = new Media("/android_asset/www/audio/sound.mp3",
+                function() {
+                },
+                function(err) {
+                }
+                );
+              mp3file.play();
+	} */
+	
+	
+	
 	var countdownTimer;
-	var seconds = 300;
+	var seconds = 400;
 	function secondPassed() {
 		var minutes = Math.round((seconds - 30)/60);
 		var remainingSeconds = seconds % 60;
@@ -94,13 +196,14 @@
 	var exam_id;
 	var total_my_question = 0;
 	var question_index;
+	var checkGetResponse = false;
 	
 	loadAllQuestion = function() {
 		var question_info = {
 			email: sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/single_play",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -143,21 +246,25 @@
 				$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
 			}
 			$("#select").selectmenu("refresh", true);
+			checkGetResponse = false;
 		} else {
 			//change page
 			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/single_play",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
 				 dataType: 'jsonp',
 				 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
 				 success: function(json){
 					if (json.statusCode == 0) {
 						clearInterval(countdownTimer);
-						$.mobile.changePage ("result.html");
+						//$.mobile.changePage ("result.html");
+						window.location = "result.html"
 					} else {
 						alert("error when save your score");
 						clearInterval(countdownTimer);
-						$.mobile.changePage ("home.html");
+						//$.mobile.changePage ("home.html");
+						window.location = "home.html"
 					}
+					checkGetResponse = false;
 				}
 			});
 
@@ -165,7 +272,10 @@
 	};
 	//when user tap next question button
 	$("#next_question").bind("click", function() {
-		loadNextQuestion();
+		if (checkGetResponse == false) {
+			checkGetResponse = true;
+			loadNextQuestion();
+		}
 	});
 </script>
 </div>

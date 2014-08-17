@@ -1,13 +1,98 @@
+<!-- Copyright (c) 2012 Mobile Developer Solutions -->
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
+
+	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+	<style type=text/css>
+		/* style for text */
+		.text {
+			color: #000000;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+			padding: 13px 20px;
+			font-size: 19px;
+			margin: 0px auto;
+			text-align: center;
+		}
+		
+		body {
+			background-color: "#f0eff6";
+		}
+		.rightMenu {
+			position: absolute;
+			top:-10%;   
+			right:-2%;
+			width: 100px !important;
+		}
+
+		.rightMenu .ui-collapsible-content .ui-listview {
+			margin: -10px -15px -10px -35px !important;
+		}
+		.horizontalRule {
+			min-height: 1px;
+			clear:both; width:100%;
+			border-bottom:1px solid #d1d1d1;
+			height:1px; 
+			padding-top:2px;
+			margin-bottom:10px;
+		}
+		
+		table{
+			border:none;
+			border-spacing:25px 8px;
+		}
+		
+		#rrr{
+			font: normal 12px 'Open Sans', sans-serif;
+			margin-top: 20px;
+		}
+		ul.countdown {
+			list-style: none;
+			margin: 15px 0;
+			padding: 0;
+			display: block;
+			text-align: center;
+		}
+		ul.countdown li {
+			display: inline-block;
+		}
+		ul.countdown li span {
+			font-size: 50px;
+			font-weight: 300;
+			line-height: 80px;
+		}
+		ul.countdown li.seperator {
+			font-size: 80px;
+			line-height: 70px;
+			vertical-align: top;
+		}
+		ul.countdown li p {
+			color: #a7abb1;
+			font-size: 14px;
+		}
+
+	</style>
+</head>
+<body>
 <div data-role=page id=home>
 	<div data-role=header >
 		<h1>Mistake Chasing Game</h1>
+		<a href=# data-role=button class="ui-btn-left" data-icon=back id="exit"> Exit </a>
 		<div data-role="collapsible" id="optionsMenu" data-mini="true" class="rightMenu">
 			<h3 style="margin-left:-15%; margin-bottom: 5%;">Actions</h3>
 			<ul data-role="listview" style="margin-left:-15%;">
 				<li data-icon="false"><a href="#">Home</a></li>
-				<li data-icon="false"><a href="change_password.html">Change Password</a></li>
-				<li data-icon="false"><a href="game_history.html">Game History</a></li>
-				<li data-icon="false"><a href="index.html">Logout</a></li>                        
+				<li data-icon="false"><a href="change_password.html" rel=external>Change Password</a></li>
+				<li data-icon="false"><a href="game_history.html" rel=external>Game History</a></li>
+				<li data-icon="false"><a href="game_history_multi.html" rel=external>Game History Multi</a></li>
+				<li data-icon="false"><a href="#" rel=external id=btnLogout>Logout</a></li>                        
 			</ul>
 		</div>
 	</div>
@@ -51,9 +136,17 @@
 				<td>Last Play:</td>
 				<td id="last_play"></td>
 			</tr>
+			<tr>
+				<td>Level:</td>
+				<td id="lv"></td>
+			</tr>
+			<tr>
+				<td>Exp Next Level:</td>
+				<td id="exp"></td>
+			</tr>
 		</table>
 		<p>
-			<a href="gameplay.html" data-role=button data-theme=e data-icon=check> START A SINGLEPLAYER GAME </a>
+			<a href="gameplay.html" rel=external data-role=button data-theme=e data-icon=check> START A SINGLEPLAYER GAME </a>
 			<a href=register_multiplayer.html rel=external data-role=button data-theme=e data-icon=check> REGISTER FOR A MULTIPLAYER GAME</a>
 		</p>
 	</div>
@@ -61,36 +154,75 @@
 		<h1>Mistake Chasing Game (c) 2013</h1>
 	</div>
 	<script type="text/javascript">
-		var user_info = {
-			email:sessionStorage.getItem("email"),
-		};
-		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/home",
-		     dataType: 'jsonp',
-		     data: user_info,
-		     success: function(json){
-				var parameters = json.parameters;
-				var userInfo = parameters[0];
-				 $("#email").text(userInfo.email);
-				 $("#age").text(userInfo.age);
-				 $("#firstname").text(userInfo.firstname.toUpperCase());
-				 $("#lastname").text(userInfo.lastname.toUpperCase());
-				 
-				 var result = parameters[1];
-				 if (result != null) {
-					 $("#best_score").text(result.score);
-					 $("#last_play").text(new Date(result.timestamp));
-				} else {
-					$("#best_score").text("N/A");
-					$("#last_play").text("N/A");
-				}
-		     },
-		     error:function(){
-		         alert("Error");
-		     }      
-		});
-		$("#optionsMenu").bind("click", function() {
-			$("#optionsMenu").trigger("collapse");
-		});
+		//document.addEventListener("deviceready", onDeviceReady, false);
+	    //function onDeviceReady() {
+	       // document.addEventListener("backbutton", function (e) {
+	           // e.preventDefault();
+	        //}, false );
+	        
+	        $("#exit").bind ("click", function (event){
+				  navigator.app.exitApp();
+			});
+			
+			var user_info = {
+				email:sessionStorage.getItem("email"),
+			};
+			
+			$("#btnLogout").bind ("click", function (event){
+				$.ajax({
+					 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/logout",
+					 dataType: 'jsonp',
+					 data: user_info,
+					 success: function(json){
+						if (json.statusCode == 0) {
+							alert("Sorry, cannot logout cause server is down now, please try again after a few minute");
+						} else {
+							alert("Logout succesfully");
+							window.location = "index.html";
+						}
+					 },
+					 error:function(){
+						 alert("Error");
+					 }      
+				});
+			});
+	        
+			$.ajax({
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/home",
+				 dataType: 'jsonp',
+				 data: user_info,
+				 success: function(json){
+					var parameters = json.parameters;
+					var userInfo = parameters[0];
+					 $("#email").text(userInfo.email);
+					 $("#age").text(userInfo.age);
+					 $("#firstname").text(userInfo.firstname.toUpperCase());
+					 $("#lastname").text(userInfo.lastname.toUpperCase());
+					 
+					 var result = parameters[1];
+					 if (result != null) {
+						 $("#best_score").text(result.score);
+						 var date = new Date(result.timestamp);
+						 var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+						 $("#last_play").text(dateString);
+					} else {
+						$("#best_score").text("N/A");
+						$("#last_play").text("N/A");
+					}
+					var result = parameters[2];
+					$("#lv").text(result);
+					var result = parameters[3];
+					$("#exp").text(result);
+				 },
+				 error:function(){
+					 alert("Error");
+				 }      
+			});
+
+		//}
+		
+
 </script>
 </div>
+</body>
+</html>

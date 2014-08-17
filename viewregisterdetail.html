@@ -82,19 +82,26 @@
 <div data-role=page id=info>
 	<div data-role=header>
 		<h1>Mistake Chasing Game</h1>
-		<a href=game_history.html data-role=button class="ui-btn-left" data-icon=arrow-l rel=external> Back </a>
+		<a href=game_history_multi.html data-role=button class="ui-btn-left" data-icon=arrow-l rel=external> Back </a>
 	</div>
 	<div data-role=content>
 		<p class="text">GAME HISTORY</p>
 		<div class="horizontalRule">
 		</div>
 		<div style="margin: 0 auto; text-align: center">
+		Room name: <span id=room_name></span><br />
+		User Created: <span id=user_created></span><br />
+		Time Created: <span id=time_created></span><br />
+		Status: <span id=status></span><br />
+		<br />
+		<span class=text>LIST OF CHASING REGISTER THIS ROOM</span><br />
 		<table data-role="table" id="movie-table" data-mode="reflow" class="ui-responsive table-stroke">
 		  <thead>
 			<tr>
-			  <th data-priority="1">STT</th>
-			  <th data-priority="2">Question</th>
-			  <th data-priority="persist">Your answer</th>
+			  <th data-priority="1">Order</th>
+			  <th data-priority="2">Email</th>
+			  <th data-priority="3">Score</th>
+			<th data-priority="4">EXP</th>
 			</tr>
 		  </thead>
 		  <tbody>
@@ -128,15 +135,41 @@
 			timestamp:parse('timestamp')
 		};
 		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/viewExam",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/viewRegister",
 		     dataType: 'jsonp',
 		     data: user_info,
 		     success: function(json){
-				var question_list = json.parameters[0];
-				var answered_list = json.parameters[1];
-				 for (var i = 0; i < question_list.length; i++) {
-					$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + question_list[i].question + "</td><td>" + answered_list[i] + "</td></tr>");
-				 }
+				var current_room = json.parameters[0];
+				$("#room_name").text(current_room.room_name);
+				var date = new Date(current_room.time_created);
+				var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+				$("#time_created").text(dateString);
+				$("#user_created").text(current_room.user_created);
+				if (current_room.started == 0)
+					$("#status").text("Open");
+				else if (current_room.started == 1)
+					$("#status").text("In Playing");
+				else
+					$("#status").text("Closed");
+					
+				var result_list = json.parameters[1];
+				for (var i = 0; i < current_room.register_list.length; i++) {
+					var hasScore = false;
+					var score;
+					var exp;
+					for (var j = 0; j < result_list.length; j++) {
+						if (result_list[j].email == current_room.register_list[i]) {
+							score = result_list[j].score;
+							exp = result_list[j].exp;
+							hasScore = true;
+							break;
+						}
+					}
+					if (hasScore == true)
+						$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + current_room.register_list[i] + "</td><td>" + score + "</td><td>" + exp + "</td></tr>");
+					else
+						$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + current_room.register_list[i] + "</td><td>N/A</td><td>N/A</td></tr>");
+				}
 				 $("table").table( "refresh" );
 		     },
 		     error:function(){

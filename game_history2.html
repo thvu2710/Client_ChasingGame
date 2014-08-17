@@ -35,7 +35,7 @@
 			email:sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/game_history",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_history",
 		     dataType: 'jsonp',
 		     data: user_info,
 		     success: function(json){

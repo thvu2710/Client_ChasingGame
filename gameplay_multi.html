@@ -6,12 +6,6 @@
 	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
 
 	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<!-- css files -->
-	<link rel="stylesheet" href="index.css">
-	<link rel="stylesheet" href="info.css">
-	<link rel="stylesheet" href="home.css">
-	<link rel="stylesheet" href="countdown_timer.css">
-	
 	<script src="jquery-1.10.2.min.js"></script>
 	<script src="jquery.mobile-1.4.2.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
@@ -25,6 +19,63 @@
 			margin: 0px auto;
 			text-align: center;
 		}
+		
+		body {
+			background-color: "#f0eff6";
+		}
+		.rightMenu {
+			position: absolute;
+			top:-10%;   
+			right:-2%;
+			width: 100px !important;
+		}
+
+		.rightMenu .ui-collapsible-content .ui-listview {
+			margin: -10px -15px -10px -35px !important;
+		}
+		.horizontalRule {
+			min-height: 1px;
+			clear:both; width:100%;
+			border-bottom:1px solid #d1d1d1;
+			height:1px; 
+			padding-top:2px;
+			margin-bottom:10px;
+		}
+		
+		table{
+			border:none;
+			border-spacing:25px 8px;
+		}
+		
+		#rrr{
+			font: normal 12px 'Open Sans', sans-serif;
+			margin-top: 20px;
+		}
+		ul.countdown {
+			list-style: none;
+			margin: 15px 0;
+			padding: 0;
+			display: block;
+			text-align: center;
+		}
+		ul.countdown li {
+			display: inline-block;
+		}
+		ul.countdown li span {
+			font-size: 50px;
+			font-weight: 300;
+			line-height: 80px;
+		}
+		ul.countdown li.seperator {
+			font-size: 80px;
+			line-height: 70px;
+			vertical-align: top;
+		}
+		ul.countdown li p {
+			color: #a7abb1;
+			font-size: 14px;
+		}
+
 	</style>
 </head>
 <body>
@@ -47,7 +98,7 @@
 		</li>
 	</ul>
 		<p class="text" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;" id="question_number" >Question</p>
-		<textarea style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Put Text here</textarea>
+		<textarea style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</textarea>
 		<span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px"> Choose the true answer : </span>
 		<select data-native-menu=false id="select">
 		</select>
@@ -78,6 +129,7 @@
 	var seconds = 300;
 	var countdownTimer;
 	var countdownTimer2;
+	var checkGetResponse = false;
 	
 	var room_id = sessionStorage.getItem("room_id");
 
@@ -108,7 +160,7 @@
 			room_id: room_id
 		};
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/game_starter",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -136,11 +188,12 @@
 		var question_info = {
 			email: sessionStorage.getItem("email"),
 			current_question_order: client_current_question_order,
-			answer:$("#select").val()
+			answer:$("#select").val(),
+			room_id: room_id
 		};
 		
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/gameplay",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -149,6 +202,7 @@
 					clearInterval(countdownTimer2);
 		    		$.mobile.changePage ("result_multi.html");
 					sessionStorage.setItem("total", total_my_question);
+					checkGetResponse = false;
 		    		return;
 		    	}
 				var question = json.parameters[0];
@@ -161,6 +215,7 @@
 		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
 		    	}
 		    	$("#select").selectmenu("refresh", true);
+				checkGetResponse = false;
 		     },
 		     error:function(){
 		         alert("Error1");
@@ -172,11 +227,12 @@
 	loadNextQuestionOnly = function() {
 		var question_info = {
 			email: sessionStorage.getItem("email"),
-			current_question_order: client_current_question_order
+			current_question_order: client_current_question_order,
+			room_id: room_id
 		};
 		
 		$.ajax({
-		     url:"http://localhost:8080/FirstRestWS/rest/webservice/gameplay_getnextonly",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -185,6 +241,7 @@
 					clearInterval(countdownTimer2);
 		    		$.mobile.changePage ("result_multi.html");
 					sessionStorage.setItem("total", total_my_question);
+					checkGetResponse = false;
 		    		return;
 		    	}
 
@@ -198,6 +255,7 @@
 		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
 		    	}
 		    	$("#select").selectmenu("refresh", true);
+				checkGetResponse = false;
 		     },
 		     error:function(){
 		         alert("Error1");
@@ -206,14 +264,17 @@
 	};
 	
 	$("#next_question").bind("click", function() {
-		loadNextQuestion();
+		if (checkGetResponse == false) {
+			checkGetResponse = true;
+			loadNextQuestion();
+		}
 	});
 	
 	loadFirstQuestion();
 	var i = 0;
 	function frequentlyChecking() {
 		$.ajax({
-			 url:"http://localhost:8080/FirstRestWS/rest/webservice/temp_play_history",
+			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
 			 dataType: 'jsonp',
 			 data: {client_current_question_order: client_current_question_order},
 			 success: function(json){

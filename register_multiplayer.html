@@ -1,19 +1,84 @@
-<!doctype html>
-<html lang="en">
+<!-- Copyright (c) 2012 Mobile Developer Solutions -->
+<!DOCTYPE HTML>
+<html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>collapsible demo</title>
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
+
 	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<!-- css files -->
-	<link rel="stylesheet" href="index.css">
-	<link rel="stylesheet" href="info.css">
-	<link rel="stylesheet" href="home.css">
-	<link rel="stylesheet" href="countdown_timer.css">
-	
 	<script src="jquery-1.10.2.min.js"></script>
 	<script src="jquery.mobile-1.4.2.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+	<style type=text/css>
+		/* style for text */
+		.text {
+			color: #000000;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+			padding: 13px 20px;
+			font-size: 19px;
+			margin: 0px auto;
+			text-align: center;
+		}
+		
+		body {
+			background-color: "#f0eff6";
+		}
+		.rightMenu {
+			position: absolute;
+			top:-10%;   
+			right:-2%;
+			width: 100px !important;
+		}
+
+		.rightMenu .ui-collapsible-content .ui-listview {
+			margin: -10px -15px -10px -35px !important;
+		}
+		.horizontalRule {
+			min-height: 1px;
+			clear:both; width:100%;
+			border-bottom:1px solid #d1d1d1;
+			height:1px; 
+			padding-top:2px;
+			margin-bottom:10px;
+		}
+		
+		table{
+			border:none;
+			border-spacing:25px 8px;
+		}
+		
+		#rrr{
+			font: normal 12px 'Open Sans', sans-serif;
+			margin-top: 20px;
+		}
+		ul.countdown {
+			list-style: none;
+			margin: 15px 0;
+			padding: 0;
+			display: block;
+			text-align: center;
+		}
+		ul.countdown li {
+			display: inline-block;
+		}
+		ul.countdown li span {
+			font-size: 50px;
+			font-weight: 300;
+			line-height: 80px;
+		}
+		ul.countdown li.seperator {
+			font-size: 80px;
+			line-height: 70px;
+			vertical-align: top;
+		}
+		ul.countdown li p {
+			color: #a7abb1;
+			font-size: 14px;
+		}
+
+	</style>
 </head>
 <body>
 <div data-role="page" id="page1">
@@ -39,7 +104,7 @@
 				<input type=text placeholder="Name of room" id="tfName">
 			</p>
 			<p class="text" style="padding-left: 40px; text-align: left">Max player in room:<br />
-				<input type=text placeholder="Max player of room" id="tfMax">
+				<input type="number" placeholder="Max player of room" id="tfMax">
 			</p>
 			
 			<a href=# data-role=button id=btn_create_room> Create Room </a>
@@ -47,64 +112,77 @@
 		</div>
 	</div>
 	<script>
-		$("#btn_create_room").bind ("click", function (event)
-		{
-			if ($("#tfName").val().length == 0 || $("#tfMax").val().length == 0) {
-				alert("Room name or Max Player must not be empty!");
-				return;
-			}
-			var room_info = {
-				email:sessionStorage.getItem("email"),
-				tfName: $("#tfName").val(),
-				tfMax:$("#tfMax").val()
-			};
-			
-			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/create_room",
-				 dataType: 'jsonp',
-				 data: room_info,
-				 success: function(json){
-					sessionStorage.setItem('room_name', $("#tfName").val());
-					$.mobile.changePage ("register_info.html");
-				 },
-				 error:function(){
-					 alert("Error");
-				 }
-			});
-		});
+	/** document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false ); */
+        
+        $("#btn_create_room").bind ("click", function (event)
+        		{
+        			if ($("#tfName").val().length == 0 || $("#tfMax").val().length == 0) {
+        				alert("Room name or Max Player must not be empty!");
+        				return;
+        			}
+        			var room_info = {
+        				email:sessionStorage.getItem("email"),
+        				tfName: $("#tfName").val(),
+        				tfMax:$("#tfMax").val()
+        			};
+        			
+        			$.ajax({
+        				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
+        				 dataType: 'jsonp',
+        				 data: room_info,
+        				 success: function(json){
+							if (json.statusCode == 0) {
+								alert(json.message);
+							} else if (json.statusCode == 1) {
+								window.location = "register_info.html?time_created=" + json.parameters[0];
+							}
+        				 },
+        				 error:function(){
+        					 alert("Error");
+        				 }
+        			});
+        		});
+        		
+        		$("#getAvailableRooom").bind ("click", function (event)
+        		{
+        			getAvailableRoom();
+        		});
+        		
+        		function getAvailableRoom() {
+        			$.ajax({
+        				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
+        				 dataType: 'jsonp',
+        				 success: function(json){
+        					$("ol").text("");
+        					for (var i = 0; i < json.parameters.length; i++) {
+        						var current_room = json.parameters[i];
+        						//var id = current_room.id;
+        						var room_name = current_room.room_name;
+        						var user_created = current_room.user_created;
+        						var time_created = current_room.time_created;
+        						//var max_of_register = current_room.max_of_register;
+        						var register_list = current_room.register_list;
+        						var total_register = register_list.length;
+        						$("ol").append("<li><a href=register_info.html?time_created=" + time_created + " rel=external>" + room_name + "<span class=ui-li-count>" + total_register + " registered</span></a></li>");
+        					}
+        					$("ol").listview('refresh');
+        				 },
+        				 error:function(){
+        					 alert("Error");
+        				 }      
+        			});
+        		}
+        		
+        		//run after enter this page
+        		getAvailableRoom();
+				var countdownTimer2 = setInterval('waitRoomStartFrequentlyChecking()', 5000);
+//}
+	
 		
-		$("#getAvailableRooom").bind ("click", function (event)
-		{
-			getAvailableRoom();
-		});
-		
-		function getAvailableRoom() {
-			$.ajax({
-				 url:"http://localhost:8080/FirstRestWS/rest/webservice/available_room",
-				 dataType: 'jsonp',
-				 success: function(json){
-					$("ol").text("");
-					for (var i = 0; i < json.parameters.length; i++) {
-						var current_room = json.parameters[i];
-						//var id = current_room.id;
-						var room_name = current_room.room_name;
-						var user_created = current_room.user_created;
-						var time_created = current_room.time_created;
-						//var max_of_register = current_room.max_of_register;
-						var register_list = current_room.register_list;
-						var total_register = register_list.length;
-						$("ol").append("<li><a href=register_info.html?room_name=" + room_name + "&user_created=" + user_created + "&time_created=" + time_created + " rel=external>" + room_name + "<span class=ui-li-count>" + total_register + " registered</span></a></li>");
-					}
-					$("ol").listview('refresh');
-				 },
-				 error:function(){
-					 alert("Error");
-				 }      
-			});
-		}
-		
-		//run after enter this page
-		getAvailableRoom();
 	</script>
 	<div data-role=footer data-position="fixed">
 		<h1>Mistake Chasing Game (c) 2013</h1>

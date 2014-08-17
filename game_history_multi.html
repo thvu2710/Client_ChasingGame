@@ -6,6 +6,12 @@
 	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
 
 	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+	<!-- css files -->
+	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="info.css">
+	<link rel="stylesheet" href="home.css">
+	<link rel="stylesheet" href="countdown_timer.css">
+	
 	<script src="jquery-1.10.2.min.js"></script>
 	<script src="jquery.mobile-1.4.2.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
@@ -21,68 +27,11 @@
 			margin: 0px auto;
 			text-align: center;
 		}
-		
-		body {
-			background-color: "#f0eff6";
-		}
-		.rightMenu {
-			position: absolute;
-			top:-10%;   
-			right:-2%;
-			width: 100px !important;
-		}
-
-		.rightMenu .ui-collapsible-content .ui-listview {
-			margin: -10px -15px -10px -35px !important;
-		}
-		.horizontalRule {
-			min-height: 1px;
-			clear:both; width:100%;
-			border-bottom:1px solid #d1d1d1;
-			height:1px; 
-			padding-top:2px;
-			margin-bottom:10px;
-		}
-		
-		table{
-			border:none;
-			border-spacing:25px 8px;
-		}
-		
-		#rrr{
-			font: normal 12px 'Open Sans', sans-serif;
-			margin-top: 20px;
-		}
-		ul.countdown {
-			list-style: none;
-			margin: 15px 0;
-			padding: 0;
-			display: block;
-			text-align: center;
-		}
-		ul.countdown li {
-			display: inline-block;
-		}
-		ul.countdown li span {
-			font-size: 50px;
-			font-weight: 300;
-			line-height: 80px;
-		}
-		ul.countdown li.seperator {
-			font-size: 80px;
-			line-height: 70px;
-			vertical-align: top;
-		}
-		ul.countdown li p {
-			color: #a7abb1;
-			font-size: 14px;
-		}
-
 	</style>
 </head>
 <body>
 <div data-role=page id=info>
-	<div data-role=header>
+	<div data-role=header >
 		<h1>Mistake Chasing Game</h1>
 		<a href=home.html data-role=button class="ui-btn-left" data-icon=arrow-l rel=external> Back </a>
 	</div>
@@ -98,7 +47,7 @@
 	  <th data-priority="1">STT</th>
       <th data-priority="2">Time</th>
       <th data-priority="persist">Result</th>
-      <th data-priority="3">Your answer</th>
+		<th data-priority="3">View Registers</th>
     </tr>
   </thead>
   <tbody>
@@ -116,7 +65,7 @@
 			email:sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_history",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_history_multi",
 		     dataType: 'jsonp',
 		     data: user_info,
 		     success: function(json){
@@ -124,7 +73,7 @@
 					var current_item = json.parameters[i];
 					 var date = new Date(current_item.timestamp);
 					 var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-					$("tbody").append("<tr><th> " + (i+1) + "</th><td> " + dateString + "</td><td>" + current_item.score + "</td><td><a rel=external data-role=button href=viewexamdetail.html?timestamp=" + current_item.timestamp + ">View Detail </a></td></tr>");
+					$("tbody").append("<tr><th> " + (i+1) + "</th><td> " + dateString + "</td><td>" + current_item.score + "</td><td><a rel=external data-role=button href=viewregisterdetail.html?timestamp=" + current_item.timestamp + ">View Detail </a></td></tr>");
 				 }
 				 $("table").table( "refresh" );
 		     },

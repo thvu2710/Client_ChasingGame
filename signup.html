@@ -2,35 +2,89 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=no, width=device-width">
-<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-<!-- css files -->
-<link rel="stylesheet" href="index.css">
-<link rel="stylesheet" href="info.css">
-<link rel="stylesheet" href="home.css">
-<link rel="stylesheet" href="countdown_timer.css">
-<script src="jquery-1.10.2.min.js"></script>
-<script src="jquery.mobile-1.4.2.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
-<style type=text/css>
-/* style for text */
-.text {
-color: #000000;
-text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
-padding: 13px 20px;
-font-size: 19px;
-margin: 0px auto;
-text-align: center;
-}
-</style>
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
+
+	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+	<style type=text/css>
+		/* style for text */
+		.text {
+			color: #000000;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+			padding: 13px 20px;
+			font-size: 19px;
+			margin: 0px auto;
+			text-align: center;
+		}
+		
+		body {
+			background-color: "#f0eff6";
+		}
+		.rightMenu {
+			position: absolute;
+			top:-10%;   
+			right:-2%;
+			width: 100px !important;
+		}
+
+		.rightMenu .ui-collapsible-content .ui-listview {
+			margin: -10px -15px -10px -35px !important;
+		}
+		.horizontalRule {
+			min-height: 1px;
+			clear:both; width:100%;
+			border-bottom:1px solid #d1d1d1;
+			height:1px; 
+			padding-top:2px;
+			margin-bottom:10px;
+		}
+		
+		table{
+			border:none;
+			border-spacing:25px 8px;
+		}
+		
+		#rrr{
+			font: normal 12px 'Open Sans', sans-serif;
+			margin-top: 20px;
+		}
+		ul.countdown {
+			list-style: none;
+			margin: 15px 0;
+			padding: 0;
+			display: block;
+			text-align: center;
+		}
+		ul.countdown li {
+			display: inline-block;
+		}
+		ul.countdown li span {
+			font-size: 50px;
+			font-weight: 300;
+			line-height: 80px;
+		}
+		ul.countdown li.seperator {
+			font-size: 80px;
+			line-height: 70px;
+			vertical-align: top;
+		}
+		ul.countdown li p {
+			color: #a7abb1;
+			font-size: 14px;
+		}
+
+	</style>
 </head>
 <body>
 <div data-role=page id=signup data-add-back-btn=true>
 	<div data-role=header  >
 		<h1>Mistake Chasing Game</h1>
-		<a href=# data-role=button class="ui-btn-right" data-icon=help> Help </a>
+		<a href=# data-role=button class="ui-btn-right" data-icon=plus> Help </a>
 		<a href=index.html rel="external" data-role=button class="ui-btn-left" data-icon=back id="exit"> Back </a>
 	</div>
 	<div data-role=content>
@@ -38,12 +92,12 @@ text-align: center;
 		<span class="text" style="font-size: 15px; color: #018cca; padding: 13px 0px;"> User Information </span>
 		<input type=text placeholder="First Name" data-inline=true id="firstname"/>
 		<input type=text placeholder="Last Name" data-inline=true id="lastname"/>
-		<input type=text placeholder="Age" data-inline=true id="age"/>
+		<input type="number" placeholder="Age" data-inline=true id="age"/>
 		<p> </p>
 		<span class="text" style="font-size: 15px; color: #018cca; padding: 13px 0px;" > Login Information</span>
 		<input type=text placeholder="Email" data-inline=true id="email"/>
-		<input type=text placeholder="Password" data-inline=true id="password"/>
-		<input type=text placeholder="Repeat Password" data-inline=true />
+		<input type=password placeholder="Password" data-inline=true id="password"/>
+		<input type=password placeholder="Repeat Password" data-inline=true id="re_password" />
 		<p>
 			<a href=# data-role=button data-theme=e data-icon=check id=btn_signup> SIGN UP NEW ACCOUNT
 			</a>
@@ -61,25 +115,35 @@ text-align: center;
 				email:$("#email").val(),
 				password:$("#password").val()
 			};
+			
+			if ($("#firstname").val().length == 0 || $("#lastname").val().length == 0 || $("#age").val().length == 0 || $("#email").val().length == 0 || $("#password").val().length == 0 || $("#re_password").val().length == 0) {
+				alert("Please fill complete fields");
+				return;
+			}
 			 
 			$.ajax({
-				 url:"http://127.0.0.1:81/Game/signup.php",
-				 dataType: 'jsonp',
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/signup",
+				 dataType: 'json',
+				type: "POST",
+				 crossDomain: true,
 				 data: user_info,
 				 success: function(json){
-					 alert("Success: " + json.success);
-					 $.mobile.changePage ("success_infor.html");
+					if (json.statusCode ==  0) {
+						alert("This email has been already signup, please choose another email");
+					} else if (json.statusCode ==  1) {
+						 alert("Signup account successfully!");
+						 window.location = "index.html?email=" + $("#email").val() + "&password=" + $("#password").val();
+					 } else {
+						alert("Signup account failed, please try again");
+					 }
 				 },
 				 error:function(){
 					 alert("Error");
 				 }      
 			});
 		});
-		
-		$("#success_infor").bind("pagebeforehide", function() {
-			$.mobile.changePage ("index.html");
-		});
 	</script>
 </div>
 </body>
 </html>
+
