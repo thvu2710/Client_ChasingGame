@@ -14,45 +14,34 @@
     <title>Hello World</title>
 </head>
 <body>
-    <div data-role="page" id="page1">
-<div data-theme="a" data-role="header">
-    <h3>
-        Header
-    </h3>
-</div>
-<div data-role="content">
-    <a data-role="button" href="#page2">
-        Button
-    </a>
-</div>
-<div data-theme="a" data-role="footer" data-position="fixed">
-    <h3>
-        Footer
-    </h3>
-</div>
-</div>
-
-    <div data-role="page" id="page2">
-<div data-role="content">
-    <img src="https://maps.googleapis.com/maps/api/staticmap?center=Madison, WI&amp;zoom=14&amp;size=288x200&amp;markers=Madison, WI&amp;sensor=false"
-    width="288" height="200">
-    <a data-role="button" href="#page1">
-        Button
-    </a>
-    <div data-role="navbar" data-iconpos="top">
-        <ul>
-            <li>
-                <a href="#page1" data-transition="fade" data-theme="" data-icon="">
-                    Button
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-</div>
-
-    <script type="text/javascript" src="js/index.js"></script>
-
+    <div data-role=page id=index>
+		<div data-role=header >
+			<h1>Mistake Chasing Game</h1>
+			<a href=info.html rel=external data-role=button class="ui-btn-right" data-icon=info> Info </a>
+			<a href=# data-role=button class="ui-btn-left" data-icon=back id="exit"> Exit </a>
+		</div>
+		<div data-role=content>
+			<p class="text">SIGN IN TO YOUR ACCOUNT</p>
+			<p>
+				<input type=text placeholder="Enter Email" id="tfEmail">
+			</p>
+			<p>
+				<input type=password placeholder="Enter Password" id="pfPassword">
+			</p>
+			<p>
+				<a href=# data-role=button data-theme=e data-icon=check id=signin> SIGN IN
+				</a>
+			</p>
+			<p class="text" style="font-size: 15px;"><a href="reset_password.html" style="text-decoration: none; color: #d10000;" >Forgot
+				Password?</a></p>
+			<p>
+				<a href=signup.html rel=external data-role=button data-icon=plus> SIGN UP NEW ACCOUNT </a>
+			</p>
+		</div>
+		<div data-role=footer  data-position="fixed">
+			<h1>Mistake Chasing Game (c) 2013</h1>
+		</div>
+	</div>
     <script type="text/javascript">
         app.initialize();
     </script>
