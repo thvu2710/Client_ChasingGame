@@ -2,15 +2,14 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-
-	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 	<style type=text/css>
 		/* style for text */
 		.text {
@@ -83,8 +82,8 @@
 <body>
 <div data-role=page id=registerer_infor data-back-button=true>
 	<div data-role=header data-back-button=true>
-		<h1>INFORMATION</h1>
-		<a href=# class="ui-btn-left" data-role=button data-icon=arrow-l id="back">Back</a>
+		<h1>Room Information</h1>
+		<a href=# class="ui-btn-left" data-role=button data-icon=back id="back">Back</a>
 	</div>
 	<div data-role=content>
 		<div id="room_info">
@@ -118,9 +117,10 @@
 			return result;
 		}
 		var room_id = 0;
-		
+		var user_created;
 		var countdownTimer2;
 		var countdownTimer3;
+		var countdownTimer4;
 		function waitRoomStartFrequentlyChecking() {
 			$.ajax({
 				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/room_started",
@@ -130,16 +130,25 @@
 					if (json.statusCode == 1) {
 						//change to gameplay_multi page
 						clearInterval(countdownTimer2);
-						$.mobile.changePage ("gameplay_multi.html");
+						clearInterval(countdownTimer3);
+						clearInterval(countdownTimer4);
+						window.location = "gameplay_multi.html";
 					} else if (json.statusCode == 0) {
 						
 					} else if (json.statusCode == 2) {
+						alert("Room has been destroy by owner");
 						clearInterval(countdownTimer2);
+						clearInterval(countdownTimer3);
+						clearInterval(countdownTimer4);
+						window.location = "register_multiplayer.html";
 					}
 					var current_room = json.parameters[0];
 					$("ol").text("");
 					for (var i = 0; i < current_room.register_list.length; i++) {
-						$("ol").append("<li>" + current_room.register_list[i] + "</li>");
+						var host = "";
+						if (current_room.user_created == current_room.register_list[i].email)
+							host = "Hosted | ";
+						$("ol").append("<li>" + current_room.register_list[i].email + "<span class=ui-li-count>" + host + "Level " + parseInt(current_room.register_list[i].total_exp/30) + "</span></li>");
 					}
 					$("ol").listview('refresh');
 				 },
@@ -156,18 +165,21 @@
 				 data: {room_id: room_id},
 				 success: function(json){
 					var current_room = json.parameters[0];
-					if (current_room.register_list.length > 1) {
+					if (current_room.register_list.length >= current_room.min_of_register) {
 						$("#btnRegister").text("Start Game");
 						$("#btnRegister").removeClass("ui-disabled");
 						$("#btnRegister").addClass("ui-enabled");
-					} else if (current_room.register_list.length <= 1) {
+					} else if (current_room.register_list.length < current_room.min_of_register) {
 						$("#btnRegister").text("Not Enough Registers, Cannot Start Game");
 						$("#btnRegister").removeClass("ui-enabled");
 						$("#btnRegister").addClass("ui-disabled");
 					}
 					$("ol").text("");
-					for (var i = 0; i < current_room.register_list.length; i++) {
-						$("ol").append("<li>" + current_room.register_list[i] + "</li>");
+					for (var i = 0; i < current_room.register_list.length; i++) {///////////////////////////////////////////////
+						var host = "";
+						if (current_room.user_created == current_room.register_list[i].email)
+							host = "Hosted | ";
+						$("ol").append("<li>" + current_room.register_list[i].email + "<span class=ui-li-count>" + host + "Level " + parseInt(current_room.register_list[i].total_exp/30) + "</span></li>");
 					}
 					$("ol").listview('refresh');
 				 },
@@ -190,15 +202,21 @@
 					sessionStorage.setItem('room_id', room_id);
 					$("#room_info").append("<span>Room name: " + current_room.room_name + "</span><br />");
 					$("#room_info").append("<span>User created: " + current_room.user_created + "</span><br />");
+					user_created = current_room.user_created;
 					 var date = new Date(current_room.time_created);
 					 var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 					$("#room_info").append("<span>Time created: " + dateString + "</span>");
 					
 					var check = false;
 					for (var i = 0; i < current_room.register_list.length; i++) {
-						$("ol").append("<li>" + current_room.register_list[i] + "</li>");
-						if (current_room.register_list[i] == sessionStorage.getItem("email"))
+						if (current_room.register_list[i].email == sessionStorage.getItem("email")) {
 							check = true;
+						}
+						var host = "";
+						if (current_room.user_created == current_room.register_list[i].email)
+							host = "Hosted | ";
+						$("ol").append("<li>" + current_room.register_list[i].email + "<span class=ui-li-count>" + host + "Level " + parseInt(current_room.register_list[i].total_exp/30) + "</span></li>");
+
 					}
 					$("ol").listview('refresh');
 					
@@ -206,17 +224,18 @@
 						$("#btnRegister").addClass("ui-enabled");
 						$("#btnRegister").text("Register this room");
 					} else {
-						if (current_room.user_created == sessionStorage.getItem("email") && current_room.register_list.length >= 2) {
+						if (current_room.user_created == sessionStorage.getItem("email") && current_room.register_list.length >= current_room.min_of_register) {
 							$("#btnRegister").addClass("ui-enabled");
 							$("#btnRegister").text("Start Game");
-						} else if (current_room.user_created == sessionStorage.getItem("email") && current_room.register_list.length < 2) {
+							countdownTimer4 = setInterval('getRoomRegisterer()', 3000);
+						} else if (current_room.user_created == sessionStorage.getItem("email") && current_room.register_list.length < current_room.min_of_register) {
 							$("#btnRegister").addClass("ui-disabled");
 							$("#btnRegister").text("Not Enough Registers, Cannot Start Game");
-							countdownTimer3 = setInterval('waitEnoughRegisterFrequentlyChecking()', 5000);
+							countdownTimer3 = setInterval('waitEnoughRegisterFrequentlyChecking()', 3000);
 						} else if (current_room.user_created != sessionStorage.getItem("email")) {
 							$("#btnRegister").addClass("ui-disabled");
 							$("#btnRegister").text("Please wait for the room owner start game...");
-							countdownTimer2 = setInterval('waitRoomStartFrequentlyChecking()', 5000);
+							countdownTimer2 = setInterval('waitRoomStartFrequentlyChecking()', 3000);
 						}
 					}
 				 },
@@ -239,7 +258,7 @@
 				 data: room_info,
 				 success: function(json){
 				 //change to gameplay_multi page
-				$.mobile.changePage ("gameplay_multi.html");
+				window.location = "gameplay_multi.html";
 				 },
 				 error:function(){
 					 alert("Error");
@@ -256,6 +275,8 @@
 				//inform server to change room started status
 				setRoomStatus(room_id, 1);
 				clearInterval(countdownTimer3);
+				clearInterval(countdownTimer2);
+				clearInterval(countdownTimer4);
 			} else if ($("#btnRegister").text() == "Register this room") {
 				var room_info = {
 					email:sessionStorage.getItem("email"),
@@ -300,11 +321,20 @@
 				 }      
 			});
 		}
+		
         
 		$("#back").bind ("click", function (event){
 			if ($("#btnRegister").text() == "Register this room") {
 				window.location = "register_multiplayer.html"
-			} else {
+			} else if (sessionStorage.getItem("email") != user_created) {
+				var r = confirm("Are you sure to exit room? You can enter this room again if you want!");
+				if (r == true) {
+				    destroyRoom(sessionStorage.getItem('room_id'), sessionStorage.getItem('email'));
+				} else {
+				    //do nothing;
+				}
+			}
+			else {
 				var r = confirm("Are you sure to exit room? This will destroy this room!");
 				if (r == true) {
 				    destroyRoom(sessionStorage.getItem('room_id'), sessionStorage.getItem('email'));

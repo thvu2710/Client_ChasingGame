@@ -2,21 +2,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-
-	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 	<style type=text/css>
 		/* style for text */
 		.text {
 			color: #000000;
 			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
-			padding: 13px 20px;
+			padding: 5px 10px;
 			font-size: 19px;
 			margin: 0px auto;
 			text-align: center;
@@ -77,25 +76,44 @@
 			color: #a7abb1;
 			font-size: 14px;
 		}
+		.yellow {
+			color: yellow;
+		}
+		.blue {
+			color: blue;
+		}
+		.green {
+			color: green;
+		}
+		.gray {
+			color: gray;
+		}
+		.red {
+			color: red;
+		}
 
 	</style>
 </head>
 <body>
 <div data-role=page id=home>
 	<div data-role=header >
-		<h1>Mistake Chasing Game</h1>
+		<h1>Game Result</h1>
 	</div>
 	<div data-role=content>
-		<p class="text">YOUR RESULT:</p>
-		<p class="text" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF QUESTIONS IN THIS TEST: 10 </p>
-		<p class="text" id="correct" style='padding: 13px 10px;font-size: 15px;'> TOTAL OF CORRECT QUESTIONS: </p>
-
+		<p class="text" style="color: blue">Your Score:</p>
+		<div style=' margin: 6px 15px 15px 15px; '>
+			<p class="text" id="correct" style='font-size: 100px; padding: 15px; background: white; width: 120px; height: 120px;border-radius: 15px; text-align: center;'></p>
+		</div>
+		<p class="text" style="font-size: 15px;" id="email">Email:</p>
+		<p class="text" style="font-size: 15px;" id= "time">Time:</p>
+		<p class="text" style="font-size: 15px;" id = "mode">Mode:</p>
+		<p class="text" style="font-size: 15px;" id="exp">Exp:</p>
 		<p>
-			<a href=home.html data-role=button data-icon=back id="back_to_home"> BACK TO HOME </a>
+			<a href=home.html data-role=button data-icon=back id="back_to_home" rel=external> Back to Home </a>
 		</p>
 	</div>
 	<div data-role=footer  data-position="fixed" >
-		<h1>Mistake Chasing Game (c) 2013</h1>
+		<h1>Mistake Chasing Game (c) 2014</h1>
 	</div>
 	<script>
 	/**
@@ -104,15 +122,54 @@
         document.addEventListener("backbutton", function (e) {
             e.preventDefault();
         }, false ); */
+		
+		function parse(val) {
+			var result = "Not found",
+				tmp = [];
+			location.search
+			//.replace ( "?", "" ) 
+			// this is better, there might be a question mark inside
+			.substr(1)
+				.split("&")
+				.forEach(function (item) {
+				tmp = item.split("=");
+				if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			});
+			return result;
+		}
         var user_info = {
-    			email: sessionStorage.getItem("email")
+    			email: sessionStorage.getItem("email"),
+				id: parse("id")
     		};
     		$.ajax({
     			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result",
     			 dataType: 'jsonp',
     			 data: user_info,
     			 success: function(json){
-    				$("#correct").text($("#correct").text() + json.parameters[0].score);
+    				$("#correct").text(json.parameters[0].score);
+					$("#correct").removeClass();
+					$("#correct").addClass("text");
+					
+					if (json.parameters[0].score >= 9)
+						$("#correct").addClass("yellow");
+					else if (json.parameters[0].score >= 7)
+						$("#correct").addClass("blue");
+					else if (json.parameters[0].score >= 5)
+						$("#correct").addClass("green");
+					else if (json.parameters[0].score >= 3)
+						$("#correct").addClass("gray");
+					else if (json.parameters[0].score >= 0)
+						$("#correct").addClass("red");
+						
+					$("#email").text("Email: " + json.parameters[0].email);
+					var date = new Date(json.parameters[0].timestamp);
+					var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+					$("#time").text("Time: " + dateString);
+					var mode = "Play single";
+					if (json.parameters[0].mode == 1)
+						mode = "Play multiple"
+					$("#mode").text("Mode: " + mode);
+					$("#exp").text("Exp: +" + json.parameters[0].exp);
     			 },
     			 error:function(){
     				 alert("Error");

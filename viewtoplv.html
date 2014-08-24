@@ -1,0 +1,145 @@
+<!-- Copyright (c) 2012 Mobile Developer Solutions -->
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<style type=text/css>
+		/* style for text */
+		.text {
+			color: #000000;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+			padding: 13px 20px;
+			font-size: 19px;
+			margin: 0px auto;
+			text-align: center;
+		}
+		
+		body {
+			background-color: "#f0eff6";
+		}
+		.rightMenu {
+			position: absolute;
+			top:-10%;   
+			right:-2%;
+			width: 100px !important;
+		}
+
+		.rightMenu .ui-collapsible-content .ui-listview {
+			margin: -10px -15px -10px -35px !important;
+		}
+		.horizontalRule {
+			min-height: 1px;
+			clear:both; width:100%;
+			border-bottom:1px solid #d1d1d1;
+			height:1px; 
+			padding-top:2px;
+			margin-bottom:10px;
+		}
+		
+		table{
+			border:none;
+			border-spacing:25px 8px;
+		}
+		
+		#rrr{
+			font: normal 12px 'Open Sans', sans-serif;
+			margin-top: 20px;
+		}
+		ul.countdown {
+			list-style: none;
+			margin: 15px 0;
+			padding: 0;
+			display: block;
+			text-align: center;
+		}
+		ul.countdown li {
+			display: inline-block;
+		}
+		ul.countdown li span {
+			font-size: 50px;
+			font-weight: 300;
+			line-height: 80px;
+		}
+		ul.countdown li.seperator {
+			font-size: 80px;
+			line-height: 70px;
+			vertical-align: top;
+		}
+		ul.countdown li p {
+			color: #a7abb1;
+			font-size: 14px;
+		}
+
+	</style>
+</head>
+<body>
+<div data-role=page id=info>
+	<div data-role=header>
+		<h1>Top 10 Level User</h1>
+		<a href=home.html data-role=button class="ui-btn-left" data-icon=back rel=external> Back </a>
+	</div>
+	<div data-role=content>
+		<p class="text" style="color: blue;">Top 10 level order by level</p>
+		<div class="horizontalRule">
+		</div>
+		<div style="margin: 0 auto; text-align: center">
+		<table data-role="table" id="movie-table" data-mode="reflow" class="ui-responsive table-stroke">
+		  <thead>
+			<tr>
+			  <th data-priority="1">Order</th>
+			  <th data-priority="2">Email</th>
+			  <th data-priority="3">Exp</th>
+			<th data-priority="4">Level</th>
+			</tr>
+		  </thead>
+		  <tbody>
+
+		  </tbody>
+		</table>
+		</div>
+	</div>
+	<div data-role=footer  data-position="fixed">
+		<h1>Mistake Chasing Game (c) 2014</h1>
+	</div>
+	
+	<script>
+		function parse(val) {
+			var result = "Not found",
+				tmp = [];
+			location.search
+			//.replace ( "?", "" ) 
+			// this is better, there might be a question mark inside
+			.substr(1)
+				.split("&")
+				.forEach(function (item) {
+				tmp = item.split("=");
+				if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			});
+			return result;
+		}
+	
+		$.ajax({
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/viewtoplv",
+		     dataType: 'jsonp',
+		     success: function(json){
+				var user_list = json.parameters[0];
+				for (var i = 0; i < user_list.length; i++) {
+					$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + user_list[i].email + "</td><td>" + user_list[i].total_exp + "</td><td>" + parseInt(user_list[i].total_exp/30) + "</td></tr>");
+				}
+				 $("table").table( "refresh" );
+		     },
+		     error:function(){
+		         alert("Error");
+		     }      
+		});
+	</script>
+</div>
+</body>
+</html>

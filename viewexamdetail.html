@@ -2,12 +2,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-
-	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
 	<style type=text/css>
 		/* style for text */
@@ -81,11 +82,11 @@
 <body>
 <div data-role=page id=info>
 	<div data-role=header>
-		<h1>Mistake Chasing Game</h1>
-		<a href=game_history.html data-role=button class="ui-btn-left" data-icon=arrow-l rel=external> Back </a>
+		<h1>Exam Detail</h1>
+		<a href=game_history.html data-role=button class="ui-btn-left" data-icon=back rel=external> Back </a>
 	</div>
 	<div data-role=content>
-		<p class="text">GAME HISTORY</p>
+		<p class="text" style="color: blue;">GAME HISTORY</p>
 		<div class="horizontalRule">
 		</div>
 		<div style="margin: 0 auto; text-align: center">
@@ -104,7 +105,7 @@
 		</div>
 	</div>
 	<div data-role=footer  data-position="fixed">
-		<h1>Mistake Chasing Game (c) 2013</h1>
+		<h1>Mistake Chasing Game (c) 2014</h1>
 	</div>
 	
 	<script>
@@ -135,7 +136,7 @@
 				var question_list = json.parameters[0];
 				var answered_list = json.parameters[1];
 				 for (var i = 0; i < question_list.length; i++) {
-					$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + question_list[i].question + "</td><td>" + answered_list[i] + "</td></tr>");
+					$("tbody").append("<tr><th>" + (i+1) + "</th><td><pre>" + question_list[i].question + "</pre></td><td>" + answered_list[i] + "</td></tr>");
 				 }
 				 $("table").table( "refresh" );
 		     },

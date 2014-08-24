@@ -1,0 +1,46 @@
+<?php
+	$verA = "1.4.3";
+	$verB = "1.4.3";
+	if ( isset($_REQUEST['ver']) ) {
+		$verA = $_REQUEST['ver'];
+		$verB = $_REQUEST['ver'];
+	}
+	if ( isset($_REQUEST['verB']) ) {
+		$verB = $_REQUEST['verB'];
+	}
+?>
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<script type="text/javascript" src="date_box_lib/jquery.mousewheel.min.js"></script>
+	<link type="text/css" href="date_box_lib/jqm-datebox-1.4.3.css" rel="stylesheet" /> 
+	<script type="text/javascript" src="date_box_lib/jqm-datebox-1.4.3.core.js"></script>
+	<script type="text/javascript" src="date_box_lib/jqm-datebox-1.4.3.mode.datebox.js"></script>
+	<script type="text/javascript" src="date_box_lib/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
+	
+</head>
+<body>
+<div data-role="page" id="main"> 
+	<div data-role="header" data-position="fixed"> 
+		<h1>jQueryMobile - Dev Page</h1>
+	</div>
+	<div class="ui-content" role="main">
+
+		<div class="ui-field-contain">
+			<label for="lang2">datebox</label>
+			<input name="lang2" type="text" data-role="datebox" data-options='{"mode": "datebox"}' id="lang2" />
+		</div>
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<h1>Some Footer Information or Something.</h1>
+	</div>
+</div>
+</html>

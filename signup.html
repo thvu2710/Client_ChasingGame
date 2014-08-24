@@ -2,15 +2,19 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-
-	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+	<script type="text/javascript" src="date_box_lib/jquery.mousewheel.min.js"></script>
+	<link type="text/css" href="date_box_lib/jqm-datebox-1.4.3.css" rel="stylesheet" /> 
+	<script type="text/javascript" src="date_box_lib/jqm-datebox-1.4.3.core.js"></script>
+	<script type="text/javascript" src="date_box_lib/jqm-datebox-1.4.3.mode.datebox.js"></script>
+	<script type="text/javascript" src="date_box_lib/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
 	<style type=text/css>
 		/* style for text */
 		.text {
@@ -92,7 +96,7 @@
 		<span class="text" style="font-size: 15px; color: #018cca; padding: 13px 0px;"> User Information </span>
 		<input type=text placeholder="First Name" data-inline=true id="firstname"/>
 		<input type=text placeholder="Last Name" data-inline=true id="lastname"/>
-		<input type="number" placeholder="Age" data-inline=true id="age"/>
+		<input name="age" type="text" data-role="datebox" data-options='{"mode": "datebox"}' id="age" />
 		<p> </p>
 		<span class="text" style="font-size: 15px; color: #018cca; padding: 13px 0px;" > Login Information</span>
 		<input type=text placeholder="Email" data-inline=true id="email"/>
@@ -107,11 +111,15 @@
 		<h1>Mistake Chasing Game (c) 2013</h1>
 	</div>
 	<script type="text/javascript">
+		function validateEmail(email) { 
+			var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			return re.test(email);
+		} 	
 		$("#btn_signup").bind("click", function() {
 			var user_info = {
 				firstname: $("#firstname").val(),
 				lastname:$("#lastname").val(),
-				age:$("#age").val(),
+				date_of_birth:$("#age").val(),
 				email:$("#email").val(),
 				password:$("#password").val()
 			};
@@ -119,7 +127,16 @@
 			if ($("#firstname").val().length == 0 || $("#lastname").val().length == 0 || $("#age").val().length == 0 || $("#email").val().length == 0 || $("#password").val().length == 0 || $("#re_password").val().length == 0) {
 				alert("Please fill complete fields");
 				return;
+			} else if (!validateEmail($("#email").val())) {
+				alert("Your email is invalid");
+				return;
+			} else if ($("#password").val() != $("#re_password").val()) {
+				alert("Your password is not the same as Re-password");
+				return;
 			}
+			
+			$("#btn_signup").removeClass("ui-enabled");
+			$("#btn_signup").addClass("ui-disabled");
 			 
 			$.ajax({
 				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/signup",
@@ -128,16 +145,20 @@
 				 crossDomain: true,
 				 data: user_info,
 				 success: function(json){
+					$("#btn_signup").removeClass("ui-disabled");
+					$("#btn_signup").addClass("ui-enabled");
 					if (json.statusCode ==  0) {
 						alert("This email has been already signup, please choose another email");
 					} else if (json.statusCode ==  1) {
-						 alert("Signup account successfully!");
+						 alert("Signup account successfully! To login, you MUST go to your registered email to verify your account.");
 						 window.location = "index.html?email=" + $("#email").val() + "&password=" + $("#password").val();
 					 } else {
 						alert("Signup account failed, please try again");
 					 }
 				 },
 				 error:function(){
+					$("#btn_signup").removeClass("ui-disabled");
+					$("#btn_signup").addClass("ui-enabled");
 					 alert("Error");
 				 }      
 			});

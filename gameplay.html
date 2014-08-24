@@ -2,15 +2,14 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-
-	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 	<style type=text/css>
 		/* style for text */
 		.text {
@@ -51,11 +50,9 @@
 		
 		#rrr{
 			font: normal 12px 'Open Sans', sans-serif;
-			margin-top: 20px;
 		}
 		ul.countdown {
 			list-style: none;
-			margin: 15px 0;
 			padding: 0;
 			display: block;
 			text-align: center;
@@ -65,73 +62,40 @@
 		}
 		ul.countdown li span {
 			font-size: 50px;
-			font-weight: 300;
-			line-height: 80px;
 		}
 		ul.countdown li.seperator {
-			font-size: 80px;
-			line-height: 70px;
+			font-size: 50px;
+			line-height: 50px;
 			vertical-align: top;
 		}
 		ul.countdown li p {
 			color: #a7abb1;
-			font-size: 14px;
+			font-size: 10px;
 		}
-		
-		#rrr{
-
-font: normal 12px 'Open Sans', sans-serif;
-margin-top: 20px;
-}
-ul.countdown {
-list-style: none;
-margin: 15px 0;
-padding: 0;
-display: block;
-text-align: center;
-}
-ul.countdown li {
-display: inline-block;
-}
-ul.countdown li span {
-font-size: 50px;
-font-weight: 300;
-line-height: 80px;
-}
-ul.countdown li.seperator {
-font-size: 80px;
-line-height: 70px;
-vertical-align: top;
-}
-ul.countdown li p {
-color: #a7abb1;
-font-size: 14px;
-}
-
 	</style>
 </head>
 <body>
 <div data-role=page data-dom-cache="false" id=home>
 	<div data-role=header  data-add-back-btn=true>
-		<h1>Mistake Chasing Game</h1>
-		<a href=home.html data-role=button class="ui-btn-left" data-icon=back> Back </a>
+		<h1>Single Player</h1>
+		<a href=# data-role=button class="ui-btn-left" data-icon=back id="back"> Back </a>
 	</div>
 	<div data-role=content id="rrr">
 	<ul class="back countdown">
-		<li> <span class="hours">00</span>
+		<li> <span class="hours" style="color: blue;">00</span>
 			<p class="hours_ref">hours</p>
 		</li>
 		<li class="seperator">:</li>
-		<li> <span class="minutes">00</span>
+		<li> <span class="minutes" style="color: blue;">00</span>
 			<p class="minutes_ref">minutes</p>
 		</li>
 		<li class="seperator">:</li>
-		<li> <span class="seconds">00</span>
+		<li> <span class="seconds" style="color: blue;">00</span>
 			<p class="seconds_ref">seconds</p>
 		</li>
 	</ul>
 		<p class="text" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;" id="question_number" >Question</p>
-		<textarea cols="40" rows="5" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</textarea>
+		<pre style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</pre>
 		<span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px"> Choose the true answer : </span>
 		<select data-native-menu=false id="select">
 		</select>
@@ -144,7 +108,7 @@ font-size: 14px;
 		</div>
 	</div>
 	<div data-role=footer  data-position="fixed">
-		<h1>Mistake Chasing Game (c) 2013</h1>
+		<h1>Mistake Chasing Game (c) 2014</h1>
 	</div>
 
 	<div data-role="popup" id="popupBasic">
@@ -210,7 +174,7 @@ font-size: 14px;
 				exam_question_list = json.parameters;
 				var question = exam_question_list[0];
 				
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
 				question_index = question.id;
 		    	$("#question").text(question.question);
 		    	var str = question.answer_list.split(" ");
@@ -226,6 +190,37 @@ font-size: 14px;
 		});
 	};
 	loadAllQuestion();
+	function sendAnswer() {
+		$.ajax({
+			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+			 dataType: 'jsonp',
+			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
+			 success: function(json){
+				if (json.statusCode == 0) {
+					clearInterval(countdownTimer);
+					window.location = "result.html?id=" + json.parameters[0];
+				} else {
+					alert("error when save your score");
+					clearInterval(countdownTimer);
+					//$.mobile.changePage ("home.html");
+					window.location = "home.html"
+				}
+				checkGetResponse = false;
+			}
+		});
+	}
+	
+	function cancelExam() {
+		$.ajax({
+			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+			 dataType: 'jsonp',
+			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
+			 success: function(json){
+				clearInterval(countdownTimer);
+				window.location = "home.html";
+			}
+		});
+	}
 
 	var totalanswer_string = "";
 	//var array = [];
@@ -238,7 +233,7 @@ font-size: 14px;
 		if (total_my_question <= 9) {
 			var question = exam_question_list[total_my_question];
 			question_index = question.id;
-			$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+			$("#question_number").text("Question: " + (++total_my_question) + "/10");
 			$("#question").text(question.question);
 			var str = question.answer_list.split(" ");
 			$("#select").html("");
@@ -249,25 +244,7 @@ font-size: 14px;
 			checkGetResponse = false;
 		} else {
 			//change page
-			$.ajax({
-				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
-				 dataType: 'jsonp',
-				 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
-				 success: function(json){
-					if (json.statusCode == 0) {
-						clearInterval(countdownTimer);
-						//$.mobile.changePage ("result.html");
-						window.location = "result.html"
-					} else {
-						alert("error when save your score");
-						clearInterval(countdownTimer);
-						//$.mobile.changePage ("home.html");
-						window.location = "home.html"
-					}
-					checkGetResponse = false;
-				}
-			});
-
+			sendAnswer();
 		}
 	};
 	//when user tap next question button
@@ -277,6 +254,17 @@ font-size: 14px;
 			loadNextQuestion();
 		}
 	});
+	$("#back").bind("click", function() {
+		var txt;
+		var r = confirm("Do you want to finish your play without answering all question?");
+		if (r == true) {
+			cancelExam();
+		} else {
+			txt = "You pressed Cancel!";
+		}
+	});
+	
+	
 </script>
 </div>
 </body>

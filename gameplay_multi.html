@@ -2,12 +2,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-	<title>MDS PhoneGap API Demo with jQuery Mobile</title>
-
-	<link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
-	<script src="jquery-1.10.2.min.js"></script>
-	<script src="jquery.mobile-1.4.2.min.js"></script>
+	<link rel="stylesheet" href="my_theme.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
+	<script src="jquery-1.11.1.min.js"></script>
+	<script src="jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
 	<style type=text/css>
 		/* style for text */
@@ -49,11 +50,9 @@
 		
 		#rrr{
 			font: normal 12px 'Open Sans', sans-serif;
-			margin-top: 20px;
 		}
 		ul.countdown {
 			list-style: none;
-			margin: 15px 0;
 			padding: 0;
 			display: block;
 			text-align: center;
@@ -63,17 +62,15 @@
 		}
 		ul.countdown li span {
 			font-size: 50px;
-			font-weight: 300;
-			line-height: 80px;
 		}
 		ul.countdown li.seperator {
-			font-size: 80px;
-			line-height: 70px;
+			font-size: 50px;
+			line-height: 50px;
 			vertical-align: top;
 		}
 		ul.countdown li p {
 			color: #a7abb1;
-			font-size: 14px;
+			font-size: 10px;
 		}
 
 	</style>
@@ -81,24 +78,24 @@
 <body>
 <div data-role=page data-dom-cache="false" id=home>
 	<div data-role=header  data-add-back-btn=true>
-		<h1>Mistake Chasing Game</h1>
+		<h1>Multiplayer</h1>
 	</div>
 	<div data-role=content id="rrr">
 	<ul class="back countdown">
-		<li> <span class="hours">00</span>
+		<li> <span class="hours" style="color: blue;">00</span>
 			<p class="hours_ref">hours</p>
 		</li>
 		<li class="seperator">:</li>
-		<li> <span class="minutes">00</span>
+		<li> <span class="minutes" style="color: blue;">00</span>
 			<p class="minutes_ref">minutes</p>
 		</li>
 		<li class="seperator">:</li>
-		<li> <span class="seconds">00</span>
+		<li> <span class="seconds" style="color: blue;">00</span>
 			<p class="seconds_ref">seconds</p>
 		</li>
 	</ul>
 		<p class="text" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;" id="question_number" >Question</p>
-		<textarea style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</textarea>
+		<pre style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</pre>
 		<span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px"> Choose the true answer : </span>
 		<select data-native-menu=false id="select">
 		</select>
@@ -119,11 +116,6 @@
 		<p>Question ? <br />answered by ?</br>at ?<p>
 	</div>
 	<script>
-	//add 10 button to present 10 question status if current game play mode is multi...
-		for (var i = 1; i <= 10; i++) {
-			$("#question_status_list").append("<a href=# data-rel=popup data-role=button data-theme=e data-icon=info data-inline=true id=b" + i + ">" + i + "</a>");
-		}
-	
 	var total_my_question = 0;
 	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
 	var seconds = 300;
@@ -146,7 +138,7 @@
 		$(".seconds").text(remainingSeconds);
 		if (seconds == 0) {
 			clearInterval(countdownTimer);
-			$.mobile.changePage ("result_multi.html");
+			window.location = "result_multi.html";
 			sessionStorage.setItem("total", total_my_question);
 		} else {
 			seconds--;
@@ -166,7 +158,7 @@
 		     success: function(json){
 				var question = json.parameters[0];
 				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
 		    	$("#question").text(question.question);
 		    	var str = question.answer_list.split(" ");
 		    	for (var i = 0; i < str.length; i++) {
@@ -200,14 +192,14 @@
 		    	if (json.statusCode == 3) {
 					clearInterval(countdownTimer);
 					clearInterval(countdownTimer2);
-		    		$.mobile.changePage ("result_multi.html");
+		    		window.location = "result_multi.html";
 					sessionStorage.setItem("total", total_my_question);
 					checkGetResponse = false;
 		    		return;
 		    	}
 				var question = json.parameters[0];
 				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
 		    	$("#question").text(question.question);
 		    	var str = question.answer_list.split(" ");
 				$("#select").html("");
@@ -239,7 +231,7 @@
 		    	if (json.parameters[0].length == 0) {
 					clearInterval(countdownTimer);
 					clearInterval(countdownTimer2);
-		    		$.mobile.changePage ("result_multi.html");
+		    		window.location = "result_multi.html";
 					sessionStorage.setItem("total", total_my_question);
 					checkGetResponse = false;
 		    		return;
@@ -247,7 +239,7 @@
 
 				var question = json.parameters[0];
 				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10" + ": " + "Java Programming");
+		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
 		    	$("#question").text(question.question);
 		    	var str = question.answer_list.split(" ");
 				$("#select").html("");
@@ -282,11 +274,7 @@
 					//next question
 					loadNextQuestionOnly();
 					alert("This question has been already answered by another one, you will be answered other question");
-					//$("#b" + client_current_question_order).buttonMarkup({ icon: "check" });
-					//$("#b" + client_current_question_order).css('background-color', 'green');
 				} else if (json.statusCode == 0) {
-					//$("#b" + client_current_question_order).buttonMarkup({ icon: "delete" });
-					//$("#b" + client_current_question_order).css('background-color', 'red');
 				}
 			 },
 			 error:function(){
@@ -294,7 +282,7 @@
 			 }
 		});
 	};
-	countdownTimer2 = setInterval('frequentlyChecking()', 5000);
+	countdownTimer2 = setInterval('frequentlyChecking()', 3000);
 </script>
 </div>
 </body>
