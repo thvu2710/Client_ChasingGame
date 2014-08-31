@@ -257,13 +257,8 @@
 		}
 	});
 	$("#back").bind("click", function() {
-		var txt;
-		var r = confirm("Do you want to finish your play without answering all question?");
-		if (r == true) {
-			cancelExam();
-		} else {
-			txt = "You pressed Cancel!";
-		}
+		alert("click back");
+		windows.location.replace("result.html");
 	});
 </script>
 </div>
