@@ -198,15 +198,12 @@
 			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
 			 success: function(json){
 				if (json.statusCode == 0) {
-					clearInterval(countdownTimer);
-					window.location = "result.html?id=" + json.parameters[0];
+					alert("chuyent trang");
+					window.location = "result.html";
 				} else {
 					alert("error when save your score");
-					clearInterval(countdownTimer);
-					//$.mobile.changePage ("home.html");
-					window.location = "home.html"
+					window.location = "home.html";
 				}
-				checkGetResponse = false;
 			}
 		});
 	}
