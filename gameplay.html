@@ -78,7 +78,7 @@
 <div data-role=page data-dom-cache="false" id=home>
 	<div data-role=header  data-add-back-btn=true>
 		<h1>Single Player</h1>
-		<a href=result.html data-role=button class="ui-btn-left" data-icon=back> result </a>
+		<a href=# data-role=button class="ui-btn-left" data-icon=back id=click> click </a>
 		<a href=result.html data-role=button class="ui-btn-right" data-icon=back rel=external> result </a>
 	</div>
 	<div data-role=content id="rrr">
@@ -265,7 +265,10 @@
 		}
 	});
 	
-	
+		$("#back").bind("click", function() {
+			alert("click");
+			window.location="result.html";
+		});
 </script>
 </div>
 </body>
