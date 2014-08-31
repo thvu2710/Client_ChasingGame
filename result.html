@@ -115,8 +115,14 @@
 	<div data-role=footer  data-position="fixed" >
 		<h1>Mistake Chasing Game (c) 2014</h1>
 	</div>
-</div>
 	<script>
+	/**
+	document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false ); */
+		
 		function parse(val) {
 			var result = "Not found",
 				tmp = [];
@@ -136,7 +142,7 @@
 				id: parse("id")
     		};
     		$.ajax({
-    			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result",
+    			 url:"http://localhost:8080/FirstRestWS/rest/webservice/result",
     			 dataType: 'jsonp',
     			 data: user_info,
     			 success: function(json){
@@ -172,5 +178,6 @@
 	//}
 		
 	</script>
+</div>
 </body>
 </html>
