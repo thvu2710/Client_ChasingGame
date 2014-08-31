@@ -199,7 +199,7 @@
 			 success: function(json){
 				if (json.statusCode == 0) {
 					clearInterval(countdownTimer);
-					window.location = "result.html?id=" + json.parameters[0];
+					window.location = "result.html";
 				} else {
 					alert("error when save your score");
 					clearInterval(countdownTimer);
@@ -264,8 +264,6 @@
 			txt = "You pressed Cancel!";
 		}
 	});
-	
-	alert("edit 1");
 </script>
 </div>
 </body>
