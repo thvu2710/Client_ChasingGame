@@ -122,7 +122,7 @@
         document.addEventListener("backbutton", function (e) {
             e.preventDefault();
         }, false ); */
-		
+				alert("da thay doi");
 		function parse(val) {
 			var result = "Not found",
 				tmp = [];
@@ -142,7 +142,7 @@
 				id: parse("id")
     		};
     		$.ajax({
-    			 url:"http://localhost:8080/FirstRestWS/rest/webservice/result",
+    			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result",
     			 dataType: 'jsonp',
     			 data: user_info,
     			 success: function(json){
@@ -176,7 +176,7 @@
     			 }
     		});
 	//}
-		
+
 	</script>
 </div>
 </body>
