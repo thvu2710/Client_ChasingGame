@@ -2,8 +2,9 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="UTF-8">
-	   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="format-detection" content="telephone=no" /><meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
@@ -152,7 +153,7 @@
 			room_id: room_id
 		};
 		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
+		     url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -185,7 +186,7 @@
 		};
 		
 		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
+		     url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -224,7 +225,7 @@
 		};
 		
 		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
+		     url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -266,7 +267,7 @@
 	var i = 0;
 	function frequentlyChecking() {
 		$.ajax({
-			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
+			 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
 			 dataType: 'jsonp',
 			 data: {client_current_question_order: client_current_question_order},
 			 success: function(json){
@@ -282,7 +283,7 @@
 			 }
 		});
 	};
-	countdownTimer2 = setInterval('frequentlyChecking()', 3000);
+	//countdownTimer2 = setInterval('frequentlyChecking()', 3000);
 </script>
 </div>
 </body>

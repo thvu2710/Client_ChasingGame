@@ -2,8 +2,9 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="UTF-8">
-	   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="format-detection" content="telephone=no" /><meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
@@ -138,39 +139,49 @@
 			  navigator.app.exitApp();
 			});
 			
-			$("#signin").bind ("click", function (event)
-			{
-			
-				if ($("#tfEmail").val().length == 0 || $("#pfPassword").val().length == 0) {
-					alert("Email or password must not be empty");
-					return;
-				}
-				var user_info = {
-					email: $("#tfEmail").val(),
-			        password:$("#pfPassword").val()
-				};
-				
-				$.ajax({
-					 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/login",
-					 dataType: 'json',
-					 type: "POST",
-					 crossDomain: true,
-					 data: user_info,
-					 success: function(json){
-						 if (json.message == "true") {
-							 sessionStorage.setItem("email", $("#tfEmail").val());
-							 sessionStorage.setItem("password", $("#pfPassword").val());
-							 //$.mobile.changePage ("home.html");
-							 window.location = "home.html"
-						 } else {
-							 alert("Email, password is not correct, your account is not activated or is being used by another one");
-						 }
-					 },
-					 error:function(){
-						 alert("Error");
-					 }      
-				});
-			});
+	$("#signin").bind ("click", function (event)
+	{
+	
+		if ($("#tfEmail").val().length == 0 || $("#pfPassword").val().length == 0) {
+			alert("Email or password must not be empty");
+			return;
+		}
+		var user_info = {
+			email: $("#tfEmail").val(),
+			password:$("#pfPassword").val()
+		};
+		
+		$("#signin").removeClass("ui-enabled");
+		$("#signin").addClass("ui-disabled");
+		
+		$.ajax({
+			 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/login",
+			 dataType: 'json',
+			 type: "POST",
+			 crossDomain: true,
+			 data: user_info,
+			 success: function(json){
+				 if (json.statusCode == 3) {
+					 sessionStorage.setItem("email", $("#tfEmail").val());
+					 sessionStorage.setItem("password", $("#pfPassword").val());
+					 window.location = "home.html"
+				 } else if (json.statusCode == 2) {
+					 alert("Your account wasn't registered, please go to your mail and activate it before sign in");
+				 } else if (json.statusCode == 1) {
+					 alert("Your account is being used, please sign out and sign in again");
+				 } else {
+					 alert("Username or password is not correct");
+				 }
+				$("#signin").removeClass("ui-disabled");
+				$("#signin").addClass("ui-enabled");
+			 },
+			 error:function(){
+				alert("Error cannot connect to server, please try again");
+				$("#signin").removeClass("ui-disabled");
+				$("#signin").addClass("ui-enabled");
+			 }      
+		});
+	});
 //}
 	
 </script>

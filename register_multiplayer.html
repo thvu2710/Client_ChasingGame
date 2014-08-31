@@ -2,8 +2,9 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="UTF-8">
-	   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="format-detection" content="telephone=no" /><meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
@@ -121,7 +122,7 @@
 			if ($("#tfName").val().length == 0 || $("#tfMax").val().length == 0) {
 				alert("Room name or Min Player must not be empty.");
 				return;
-			} else if ($("#tfMax").val() < 2 || $("#tfMax").val() > 5) {
+			} else if ($("#tfMax").val() < 1 || $("#tfMax").val() > 5) {
 				alert("Min Player must not be lower than 2 or bigger than 5.");
 				return;
 			}
@@ -132,7 +133,7 @@
 			};
 			
 			$.ajax({
-				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
+				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){
@@ -150,7 +151,7 @@
 		
 		function getAvailableRoom() {
 			$.ajax({
-				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
+				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
 				 dataType: 'jsonp',
 				 success: function(json){
 					$("ol").text("");
