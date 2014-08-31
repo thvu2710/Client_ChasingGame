@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="format-detection" content="telephone=no" /><meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
 	<link rel="stylesheet" href="my_theme.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
 	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
@@ -78,8 +78,7 @@
 <div data-role=page data-dom-cache="false" id=home>
 	<div data-role=header  data-add-back-btn=true>
 		<h1>Single Player</h1>
-		<a href=# data-role=button class="ui-btn-left" data-icon=back id=click> click </a>
-		<a href=result.html data-role=button class="ui-btn-right" data-icon=back rel=external> result </a>
+		<a href=# data-role=button class="ui-btn-left" data-icon=back id="back"> Back </a>
 	</div>
 	<div data-role=content id="rrr">
 	<ul class="back countdown">
@@ -168,7 +167,7 @@
 			email: sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+		     url:"http://localhost:8080/FirstRestWS/rest/webservice/single_play",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -197,20 +196,24 @@
 			 dataType: 'jsonp',
 			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
 			 success: function(json){
+			 	alert("chuyen trang");
 				if (json.statusCode == 0) {
-					alert("chuyent trang");
+					clearInterval(countdownTimer);
 					window.location = "result.html";
 				} else {
 					alert("error when save your score");
+					clearInterval(countdownTimer);
+					//$.mobile.changePage ("home.html");
 					window.location = "home.html";
 				}
+				checkGetResponse = false;
 			}
 		});
 	}
 	
 	function cancelExam() {
 		$.ajax({
-			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+			 url:"http://localhost:8080/FirstRestWS/rest/webservice/single_play",
 			 dataType: 'jsonp',
 			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
 			 success: function(json){
@@ -262,10 +265,7 @@
 		}
 	});
 	
-		$("#click").bind("click", function() {
-			alert("click");
-			window.location="result.html"
-		});
+	
 </script>
 </div>
 </body>
