@@ -154,19 +154,19 @@
 		<h1>Mistake Chasing Game (c) 2014</h1>
 	</div>
 	<script type="text/javascript">
-		document.addEventListener("deviceready", onDeviceReady, false);
-	    	function onDeviceReady() {
-	       	document.addEventListener("backbutton", function (e) {
-	           e.preventDefault();
-	           logout();
-	        }, false );
+		//document.addEventListener("deviceready", onDeviceReady, false);
+	    	//function onDeviceReady() {
+	       	//document.addEventListener("backbutton", function (e) {
+	           //e.preventDefault();
+	           //logout();
+	       // }, false );
 	        
 	        $("#exit").bind ("click", function (event){
 			navigator.app.exitApp();
 		});
 		
 		var user_info = {
-			email:sessionStorage.getItem("email"),
+			email:sessionStorage.getItem("email")
 		};
 		
 		function logout () {
@@ -231,7 +231,7 @@
 			 }      
 		});
 
-		}
+	//	}
 		
 
 </script>
