@@ -131,9 +131,9 @@
 		$("#tfEmail").val(parse('email'));
 		$("#pfPassword").val(parse('password'));
 	}
-//document.addEventListener("deviceReady", deviceReady, false);
+document.addEventListener("deviceReady", deviceReady, false);
 
-//function deviceReady() {
+function deviceReady() {
 	$("#exit").bind ("click", function (event)
 			{
 			  navigator.app.exitApp();
@@ -182,7 +182,7 @@
 			 }      
 		});
 	});
-//}
+}
 	
 </script>
 </html>
