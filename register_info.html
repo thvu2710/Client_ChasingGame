@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
@@ -124,7 +124,7 @@
 		var countdownTimer4;
 		function waitRoomStartFrequentlyChecking() {
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/room_started",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/room_started",
 				 dataType: 'jsonp',
 				 data: {room_id: room_id},
 				 success: function(json){
@@ -161,7 +161,7 @@
 
 		function waitEnoughRegisterFrequentlyChecking() {
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/enough_register_room_started",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/enough_register_room_started",
 				 dataType: 'jsonp',
 				 data: {room_id: room_id},
 				 success: function(json){
@@ -193,7 +193,7 @@
 		
 		function getRoomRegisterer(current_room_time) {
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/room_registers",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/room_registers",
 				 dataType: 'jsonp',
 				 data: {room_time_created:current_room_time},
 				 success: function(json){
@@ -245,8 +245,8 @@
 				 }      
 			});
 		}
-		
-		getRoomRegisterer(parse('time_created'));
+
+		getRoomRegisterer(sessionStorage.getItem("time_created"));
 		
 		function setRoomStatus(my_room_id, started) {
 			var room_info = {
@@ -254,7 +254,7 @@
 				room_id: my_room_id
 			};
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/set_room_started",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/set_room_started",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){
@@ -285,14 +285,14 @@
 				};
 			
 				$.ajax({
-					 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/register_room",
+					 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/register_room",
 					 dataType: 'jsonp',
 					 data: room_info,
 					 success: function(json){
 						if (json.statusCode == 1) {
 							$.mobile.changePage ("#error_infor");
 						 } else if(json.statusCode == 2){
-							window.location = "success_infor.html?time_created=" + parse('time_created');
+							window.location = "success_infor.html";
 						 }
 					 },
 					 error:function(){
@@ -311,7 +311,7 @@
 				email: email
 			};
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/destroy_room",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/destroy_room",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){

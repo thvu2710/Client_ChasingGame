@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
@@ -59,7 +59,7 @@
 			email:sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_history_multi",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_history_multi",
 		     dataType: 'jsonp',
 		     data: user_info,
 		     success: function(json){
@@ -67,9 +67,13 @@
 					var current_item = json.parameters[i];
 					 var date = new Date(current_item.timestamp);
 					 var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-					$("tbody").append("<tr><th> " + (i+1) + "</th><td> " + dateString + "</td><td>" + current_item.score + "</td><td><a rel=external data-role=button href=viewregisterdetail.html?timestamp=" + current_item.timestamp + ">View Detail </a></td></tr>");
+					$("tbody").append("<tr><th> " + (i+1) + "</th><td> " + dateString + "</td><td>" + current_item.score + "</td><td><a data-role=button href=# timestamp=" + current_item.timestamp + ">View Detail </a></td></tr>");
 				 }
 				 $("table").table( "refresh" );
+				$("td a").bind( "click", function() {
+					sessionStorage.setItem("timestamp", $(this).attr("timestamp"));
+					window.location = "viewregisterdetail.html";
+				});
 		     },
 		     error:function(){
 		         alert("Error");

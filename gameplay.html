@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
@@ -168,7 +168,7 @@
 			email: sessionStorage.getItem("email")
 		};
 		$.ajax({
-		     url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
 		     dataType: 'jsonp',
 			 data: question_info,
 		     success: function(json){
@@ -193,14 +193,15 @@
 	loadAllQuestion();
 	function sendAnswer() {
 		$.ajax({
-			 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
 			 dataType: 'jsonp',
 			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
 			 success: function(json){
 				if (json.statusCode == 0) {
 					clearInterval(countdownTimer);
-					//window.location = "result.html";
-					windows.location.replace("result.html");
+					//window.location = "result.html?id=" + json.parameters[0];
+					sessionStorage.setItem("id", json.parameters[0]);
+					window.location = "result.html";
 				} else {
 					alert("error when save your score");
 					clearInterval(countdownTimer);
@@ -214,7 +215,7 @@
 	
 	function cancelExam() {
 		$.ajax({
-			 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
 			 dataType: 'jsonp',
 			 data: {mydata:totalanswer_string, email:sessionStorage.getItem("email")},
 			 success: function(json){
@@ -257,9 +258,16 @@
 		}
 	});
 	$("#back").bind("click", function() {
-		alert("click back222");
-		window.location.replace("result.html?cd=5");
+		var txt;
+		var r = confirm("Do you want to finish your play without answering all question?");
+		if (r == true) {
+			cancelExam();
+		} else {
+			txt = "You pressed Cancel!";
+		}
 	});
+	
+	
 </script>
 </div>
 </body>

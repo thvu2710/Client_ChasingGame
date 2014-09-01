@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
@@ -123,7 +123,7 @@
 			room_id: sessionStorage.getItem("room_id")
 		};
 		$.ajax({
-			 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result_multi",
+			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result_multi",
 			 dataType: 'jsonp',
 			 data: user_info,
 			 success: function(json){
@@ -140,18 +140,22 @@
 						$("#correct").addClass("green");
 					else if (json.parameters[0].score >= 3)
 						$("#correct").addClass("gray");
-					else if (json.parameters[0].score >= 0)
+					else {
 						$("#correct").addClass("red");
-						
+					}
 					$("#email").text("Email: " + json.parameters[0].email);
 					var date = new Date(json.parameters[0].timestamp);
 					var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 					$("#time").text("Time: " + dateString);
-					var mode = "Play single";
+					var mode = "Single Player";
 					if (json.parameters[0].mode == 1)
-						mode = "Play multiple"
+						mode = "Multiplayer"
 					$("#mode").text("Mode: " + mode);
-					$("#exp").text("Exp: +" + json.parameters[0].exp);
+					if (json.parameters[0].exp >= 0) {
+						$("#exp").text("Exp: +" + json.parameters[0].exp);
+					} else {
+						$("#exp").text("Exp: " + json.parameters[0].exp);
+					}
 				 } else {
 					 alert("ERROR");
 				 }

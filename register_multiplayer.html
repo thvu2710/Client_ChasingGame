@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
@@ -132,26 +132,34 @@
 				tfMax:$("#tfMax").val()
 			};
 			
+			$("#btn_create_room").removeClass("ui-enabled");
+			$("#btn_create_room").addClass("ui-disabled");
+			
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
 				 dataType: 'jsonp',
 				 data: room_info,
 				 success: function(json){
 					if (json.statusCode == 0) {
 						alert(json.message);
 					} else if (json.statusCode == 1) {
-						window.location = "register_info.html?time_created=" + json.parameters[0];
+						sessionStorage.setItem("time_created", json.parameters[0]);
+						window.location = "register_info.html";
 					}
+					$("#btn_create_room").removeClass("ui-disabled");
+					$("#btn_create_room").addClass("ui-enabled");
 				 },
 				 error:function(){
-					 alert("Error");
+					 alert("Error cannot connect to server");
+					 $("#btn_create_room").removeClass("ui-disabled");
+					$("#btn_create_room").addClass("ui-enabled");
 				 }
 			});
 		});
 		
 		function getAvailableRoom() {
 			$.ajax({
-				 url:"https://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
+				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
 				 dataType: 'jsonp',
 				 success: function(json){
 					$("ol").text("");
@@ -164,10 +172,12 @@
 						//var max_of_register = current_room.max_of_register;
 						var register_list = current_room.register_list;
 						var total_register = register_list.length;
-						$("ol").append("<li class=data_room><a href=register_info.html?time_created=" + time_created + " rel=external>" + room_name + "<span class=ui-li-count>" + total_register + " registered</span></a></li>");
+						$("ol").append("<li class=data_room><a href=# time_created=" + time_created + ">" + room_name + "<span class=ui-li-count>" + total_register + " registered</span></a></li>");
 					}
 					$("ol").listview('refresh');
-					$("ol li").bind( "click", function() {
+					$("ol li a").bind( "click", function() {
+						sessionStorage.setItem("time_created", $(this).attr("time_created"));
+						window.location = "register_info.html";
 						clearInterval(countdownTimer2);
 					});
 				 },

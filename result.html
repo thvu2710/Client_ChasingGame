@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="my_theme.min.css" />
@@ -116,6 +116,70 @@
 	<div data-role=footer  data-position="fixed" >
 		<h1>Mistake Chasing Game (c) 2014</h1>
 	</div>
+	<script>
+	
+	/**
+	document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false ); */
+		
+		function parse(val) {
+			var result = "Not found",
+				tmp = [];
+			location.search
+			//.replace ( "?", "" ) 
+			// this is better, there might be a question mark inside
+			.substr(1)
+				.split("&")
+				.forEach(function (item) {
+				tmp = item.split("=");
+				if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			});
+			return result;
+		}
+        var user_info = {
+    			email: sessionStorage.getItem("email"),
+				id: sessionStorage.getItem("id")
+    		};
+    		$.ajax({
+    			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result",
+    			 dataType: 'jsonp',
+    			 data: user_info,
+    			 success: function(json){
+    				$("#correct").text(json.parameters[0].score);
+					$("#correct").removeClass();
+					$("#correct").addClass("text");
+					
+					if (json.parameters[0].score >= 9)
+						$("#correct").addClass("yellow");
+					else if (json.parameters[0].score >= 7)
+						$("#correct").addClass("blue");
+					else if (json.parameters[0].score >= 5)
+						$("#correct").addClass("green");
+					else if (json.parameters[0].score >= 3)
+						$("#correct").addClass("gray");
+					else {
+						$("#correct").addClass("red");
+					}
+					$("#email").text("Email: " + json.parameters[0].email);
+					var date = new Date(json.parameters[0].timestamp);
+					var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+					$("#time").text("Time: " + dateString);
+					var mode = "Single Player";
+					if (json.parameters[0].mode == 1)
+						mode = "Multiplayer"
+					$("#mode").text("Mode: " + mode);
+					$("#exp").text("Exp: +" + json.parameters[0].exp);
+    			 },
+    			 error:function(){
+    				 alert("Error");
+    			 }
+    		});
+	//}
+		
+	</script>
 </div>
 </body>
 </html>
