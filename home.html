@@ -171,9 +171,12 @@
         document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
-		    if($.mobile.activePage.is('#home') || $.mobile.activePage.is('#gameplay') || $.mobile.activePage.is('#gameplay_multi') || $.mobile.activePage.is('#register_info')){
 		    document.addEventListener("backbutton", function(e) {
-		        e.preventDefault();
+	               if($.mobile.activePage.is('#home') || $.mobile.activePage.is('#gameplay') || $.mobile.activePage.is('#gameplay_multi') || $.mobile.activePage.is('#register_info')){
+	               		e.preventDefault();
+	               } else {
+           			navigator.app.backHistory()
+       			}
 		    }, false);
 		    $("#exit").bind("click", function(event) {
 		        navigator.app.exitApp();
