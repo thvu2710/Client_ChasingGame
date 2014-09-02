@@ -1,206 +1,204 @@
 <!-- Copyright (c) 2012 Mobile Developer Solutions -->
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-	<link rel="stylesheet" href="my_theme.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
-	<script src="jquery-1.11.1.min.js"></script>
-	<script src="jquery.mobile-1.4.3.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<style type=text/css>
-		/* style for text */
-		.text {
-			color: #000000;
-			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
-			padding: 13px 20px;
-			font-size: 19px;
-			margin: 0px auto;
-			text-align: center;
-		}
-		
-		body {
-			background-color: "#f0eff6";
-		}
-		.rightMenu {
-			position: absolute;
-			top:-10%;   
-			right:-2%;
-			width: 100px !important;
-		}
-
-		.rightMenu .ui-collapsible-content .ui-listview {
-			margin: -10px -15px -10px -35px !important;
-		}
-		.horizontalRule {
-			min-height: 1px;
-			clear:both; width:100%;
-			border-bottom:1px solid #d1d1d1;
-			height:1px; 
-			padding-top:2px;
-			margin-bottom:10px;
-		}
-		
-		table{
-			border:none;
-			border-spacing:25px 8px;
-		}
-		
-		#rrr{
-			font: normal 12px 'Open Sans', sans-serif;
-			margin-top: 20px;
-		}
-		ul.countdown {
-			list-style: none;
-			margin: 15px 0;
-			padding: 0;
-			display: block;
-			text-align: center;
-		}
-		ul.countdown li {
-			display: inline-block;
-		}
-		ul.countdown li span {
-			font-size: 50px;
-			font-weight: 300;
-			line-height: 80px;
-		}
-		ul.countdown li.seperator {
-			font-size: 80px;
-			line-height: 70px;
-			vertical-align: top;
-		}
-		ul.countdown li p {
-			color: #a7abb1;
-			font-size: 14px;
-		}
-
-	</style>
-</head>
-<body>
-<div data-role="page" id="page1">
-	<div data-role="header">
-		<h1>Register room</h1>
-		<a href=# data-role=button class="ui-btn-left" data-icon=back id=back> Back </a>
-	</div>
-	<div data-role="content">
-		<div data-role="tabs">
-			<div data-role="navbar" data-iconpos="top" >
-				<ul>
-					<li><a data-icon="check" class="ui-btn-active" href="#john_a_room" id="getAvailableRooom">Available room</a></li>
-					<li><a data-icon="plus" href="#create_new_room">Create new room</a></li>
-				</ul>
-			</div>
-			<div id="john_a_room">
-				<ol data-role="listview" data-inset="true">
-					
-				</ol>
-			</div>
-			<div id="create_new_room">
-			<p class="text" style="color: blue; padding-left: 40px; text-align: left">Type the name of your room:<br />
-				<input type=text placeholder="Name of room" id="tfName">
-			</p>
-			<p class="text" style="color: blue; padding-left: 40px; text-align: left">Min of players to start game:<br />
-				<input type="number" placeholder="Max player of room" id="tfMax">
-			</p>
-			
-			<a href=# data-role=button id=btn_create_room> Create Room </a>
-			</div>
-		</div>
-	</div>
-	<script>
-	/** document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
-        document.addEventListener("backbutton", function (e) {
-            e.preventDefault();
-        }, false ); */
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" name="viewport">
+    <link href="my_theme.min.css" rel="stylesheet">
+    <link href="jquery.mobile.icons.min.css" rel="stylesheet">
+    <link href="jquery.mobile.structure-1.4.3.min.css" rel="stylesheet">
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile-1.4.3.min.js"></script>
+    <script charset="utf-8" src="cordova-1.5.0.js" type="text/javascript"></script>
+    <script charset="utf-8" src="cordova.js" type="text/javascript"></script>
+    <script charset="utf-8" src="phonegap.js" type="text/javascript"></script>
+    <style type="text/css">
+    /* style for text */
+        .text {
+            color: #000000;
+            text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+            padding: 13px 20px;
+            font-size: 19px;
+            margin: 0px auto;
+            text-align: center;
+        }
         
-        $("#btn_create_room").bind ("click", function (event) {
-			if ($("#tfName").val().length == 0 || $("#tfMax").val().length == 0) {
-				alert("Room name or Min Player must not be empty.");
-				return;
-			} else if ($("#tfMax").val() < 1 || $("#tfMax").val() > 5) {
-				alert("Min Player must not be lower than 2 or bigger than 5.");
-				return;
-			}
-			var room_info = {
-				email:sessionStorage.getItem("email"),
-				tfName: $("#tfName").val(),
-				tfMax:$("#tfMax").val()
-			};
-			
-			$("#btn_create_room").removeClass("ui-enabled");
-			$("#btn_create_room").addClass("ui-disabled");
-			
-			$.ajax({
-				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
-				 dataType: 'jsonp',
-				 data: room_info,
-				 success: function(json){
-					if (json.statusCode == 0) {
-						alert(json.message);
-					} else if (json.statusCode == 1) {
-						sessionStorage.setItem("time_created", json.parameters[0]);
-						window.location = "register_info.html";
-					}
-					$("#btn_create_room").removeClass("ui-disabled");
-					$("#btn_create_room").addClass("ui-enabled");
-				 },
-				 error:function(){
-					 alert("Error cannot connect to server");
-					 $("#btn_create_room").removeClass("ui-disabled");
-					$("#btn_create_room").addClass("ui-enabled");
-				 }
-			});
-		});
-		
-		function getAvailableRoom() {
-			$.ajax({
-				 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
-				 dataType: 'jsonp',
-				 success: function(json){
-					$("ol").text("");
-					for (var i = 0; i < json.parameters.length; i++) {
-						var current_room = json.parameters[i];
-						//var id = current_room.id;
-						var room_name = current_room.room_name;
-						var user_created = current_room.user_created;
-						var time_created = current_room.time_created;
-						//var max_of_register = current_room.max_of_register;
-						var register_list = current_room.register_list;
-						var total_register = register_list.length;
-						$("ol").append("<li class=data_room><a href=# time_created=" + time_created + ">" + room_name + "<span class=ui-li-count>" + total_register + " registered</span></a></li>");
-					}
-					$("ol").listview('refresh');
-					$("ol li a").bind( "click", function() {
-						sessionStorage.setItem("time_created", $(this).attr("time_created"));
-						window.location = "register_info.html";
-						clearInterval(countdownTimer2);
-					});
-				 },
-				 error:function(){
-					 alert("Error");
-				 }      
-			});
-		}
-		var countdownTimer2 = setInterval('getAvailableRoom()', 3000);
-		$("#back").bind ("click", function (event)
-		{
-			clearInterval(countdownTimer2);
-			window.location = "home.html";
-		});
-		getAvailableRoom();
+        body {
+            background-color: "#f0eff6";
+        }
+        .rightMenu {
+            position: absolute;
+            top:-10%;   
+            right:-2%;
+            width: 100px !important;
+        }
 
-//}
-	
-		
-	</script>
-	<div data-role=footer data-position="fixed">
-		<h1>Mistake Chasing Game (c) 2014</h1>
-	</div>
-</div>
+        .rightMenu .ui-collapsible-content .ui-listview {
+            margin: -10px -15px -10px -35px !important;
+        }
+        .horizontalRule {
+            min-height: 1px;
+            clear:both; width:100%;
+            border-bottom:1px solid #d1d1d1;
+            height:1px; 
+            padding-top:2px;
+            margin-bottom:10px;
+        }
+        
+        table{
+            border:none;
+            border-spacing:25px 8px;
+        }
+        
+        #rrr{
+            font: normal 12px 'Open Sans', sans-serif;
+            margin-top: 20px;
+        }
+        ul.countdown {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+            display: block;
+            text-align: center;
+        }
+        ul.countdown li {
+            display: inline-block;
+        }
+        ul.countdown li span {
+            font-size: 50px;
+            font-weight: 300;
+            line-height: 80px;
+        }
+        ul.countdown li.seperator {
+            font-size: 80px;
+            line-height: 70px;
+            vertical-align: top;
+        }
+        ul.countdown li p {
+            color: #a7abb1;
+            font-size: 14px;
+        }
+
+    </style>
+
+    <title></title>
+</head>
+
+<body>
+    <div data-role="page" id="page1">
+        <div data-role="header">
+            <h1>Register room</h1><a class="ui-btn-left" data-icon="back" data-role="button" href="#" id="back">Back</a>
+        </div>
+
+        <div data-role="content" data-role="tabs">
+            <div data-iconpos="top" data-role="navbar">
+                <ul>
+                    <li>
+                        <a class="ui-btn-active" data-icon="check" href="#john_a_room" id="getAvailableRooom">Available room</a>
+                    </li>
+
+                    <li>
+                        <a data-icon="plus" href="#create_new_room">Create new room</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="john_a_room">
+                <ol data-inset="true" data-role="listview"></ol>
+            </div>
+
+            <div id="create_new_room">
+                <p class="text" style="color: blue; padding-left: 40px; text-align: left">Type the name of your room:<br>
+                <input id="tfName" placeholder="Name of room" type="text"></p>
+
+                <p class="text" style="color: blue; padding-left: 40px; text-align: left">Min of players to start game:<br>
+                <input id="tfMax" placeholder="Max player of room" type="number"></p><a data-role="button" href="#" id="btn_create_room">Create Room</a>
+            </div>
+        </div>
+    	<div data-role=footer data-position="fixed">
+		    <h1>Mistake Chasing Game (c) 2014</h1>
+	    </div>
+        <script>
+        	/** document.addEventListener("deviceready", onDeviceReady, false);
+            function onDeviceReady() {
+                document.addEventListener("backbutton", function (e) {
+                    e.preventDefault();
+                }, false ); */
+        	$("#btn_create_room").bind("click", function(event) {
+        	    if ($("#tfName").val().length == 0 || $("#tfMax").val().length == 0) {
+        	        alert("Room name or Min Player must not be empty.");
+        	        return;
+        	    } else if ($("#tfMax").val() < 1 || $("#tfMax").val() > 5) {
+        	        alert("Min Player must not be lower than 2 or bigger than 5.");
+        	        return;
+        	    }
+        	    var room_info = {
+        	        email: sessionStorage.getItem("email"),
+        	        tfName: $("#tfName").val(),
+        	        tfMax: $("#tfMax").val()
+        	    };
+        	    $("#btn_create_room").removeClass("ui-enabled");
+        	    $("#btn_create_room").addClass("ui-disabled");
+        	    $.ajax({
+        	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/create_room",
+        	        dataType: 'jsonp',
+        	        data: room_info,
+        	        success: function(json) {
+        	            if (json.statusCode == 0) {
+        	                alert(json.message);
+        	            } else if (json.statusCode == 1) {
+        	                sessionStorage.setItem("time_created", json.parameters[0]);
+        	                window.location = "register_info.html";
+        	            }
+        	            $("#btn_create_room").removeClass("ui-disabled");
+        	            $("#btn_create_room").addClass("ui-enabled");
+        	        },
+        	        error: function() {
+        	            alert("Error cannot connect to server");
+        	            $("#btn_create_room").removeClass("ui-disabled");
+        	            $("#btn_create_room").addClass("ui-enabled");
+        	        }
+        	    });
+        	});
+        
+        	function getAvailableRoom() {
+        	    $.ajax({
+        	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/available_room",
+        	        dataType: 'jsonp',
+        	        success: function(json) {
+        	            $("ol").text("");
+        	            for (var i = 0; i < json.parameters.length; i++) {
+        	                var current_room = json.parameters[i];
+        	                //var id = current_room.id;
+        	                var room_name = current_room.room_name;
+        	                var user_created = current_room.user_created;
+        	                var time_created = current_room.time_created;
+        	                //var max_of_register = current_room.max_of_register;
+        	                var register_list = current_room.register_list;
+        	                var total_register = register_list.length;
+        	                $("ol").append("<li class=data_room><a href=# time_created=" + time_created + ">" + room_name + "<span class=ui-li-count>" + total_register + " registered</span></a></li>");
+        	            }
+        	            $("ol").listview('refresh');
+        	            $("ol li a").bind("click", function() {
+        	                sessionStorage.setItem("time_created", $(this).attr("time_created"));
+        	                window.location = "register_info.html";
+        	                clearInterval(countdownTimer2);
+        	            });
+        	        },
+        	        error: function() {
+        	            alert("Error");
+        	        }
+        	    });
+        	}
+        	var countdownTimer2 = setInterval('getAvailableRoom()', 3000);
+        	$("#back").bind("click", function(event) {
+        	    clearInterval(countdownTimer2);
+        	    window.location = "home.html";
+        	});
+        	getAvailableRoom();
+        	 //}
+        </script>
+    </div>
 </body>
 </html>
