@@ -172,13 +172,7 @@
 
 		function onDeviceReady() {
 		    document.addEventListener("backbutton", function(e) {
-	               if($.mobile.activePage.is('#home') || $.mobile.activePage.is('#gameplay') || $.mobile.activePage.is('#gameplay_multi') || $.mobile.activePage.is('#register_info')){
-	               		alert("prevent default");
-	               		e.preventDefault();
-	               } else {
-	               		alert("back history");
-           			navigator.app.backHistory()
-       			}
+	               
 		    }, false);
 		    $("#exit").bind("click", function(event) {
 		        navigator.app.exitApp();
