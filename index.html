@@ -106,12 +106,16 @@
     </div>
     <script>
 	document.addEventListener("deviceReady", deviceReady, false);
-		document.addEventListener("pagebeforehide", function (e) {
-			alert("kaka");
-		}, false );
+
 
 	function deviceReady() {
-		alert("device ready 45");
+		document.addEventListener("pagebeforehide", function (e) {
+			alert("pagebeforehide");
+		}, false );
+		document.addEventListener("pagehide", function (e) {
+			alert("pagehide");
+		}, false );
+		alert("device ready 50");
 		
 	    $("#exit").bind("click", function(event) {
 	        navigator.app.exitApp();
