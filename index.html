@@ -107,8 +107,7 @@
     <script>
 	document.addEventListener("deviceReady", deviceReady, false);
 	function deviceReady() {
-		alert("Version 2");
-		document.removeEventListener("backbutton", function (e) {
+		document.addEventListener("backbutton", function (e) {
 			//dont prevent back button
 		}, false );
 	    $("#exit").bind("click", function(event) {
