@@ -245,6 +245,8 @@
         	getRoomRegisterer(sessionStorage.getItem("time_created"));
         
         	function setRoomStatus(my_room_id, started) {
+        	    $("#btnRegister").removeClass("ui-enabled");
+                $("#btnRegister").addClass("ui-disabled");
         	    var room_info = {
         	        started: started,
         	        room_id: my_room_id
@@ -254,11 +256,15 @@
         	        dataType: 'jsonp',
         	        data: room_info,
         	        success: function(json) {
+        	            $("#btnRegister").removeClass("ui-disabled");
+                        $("#btnRegister").addClass("ui-enabled");
         	            //change to gameplay_multi page
         	            window.location = "gameplay_multi.html";
         	        },
         	        error: function() {
-        	            alert("Error");
+        	            $("#btnRegister").removeClass("ui-disabled");
+                        $("#btnRegister").addClass("ui-enabled");
+        	            alert("Cannot connect to server");
         	        }
         	    });
         	}
