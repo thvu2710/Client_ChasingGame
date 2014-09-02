@@ -195,7 +195,34 @@ Loading Question...
         	};
         	loadAllQuestion();
         
-
+        	function sendAnswer() {
+        	    $("#next_question").removeClass("ui-enabled");
+                $("#next_question").addClass("ui-disabled");
+        	    $.ajax({
+        	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
+        	        dataType: 'jsonp',
+        	        data: {
+        	            mydata: totalanswer_string,
+        	            email: sessionStorage.getItem("email")
+        	        },
+        	        success: function(json) {
+        	            $("#next_question").removeClass("ui-disabled");
+                        $("#next_question").addClass("ui-enabled");
+        	            if (json.statusCode == 0) {
+        	                clearInterval(countdownTimer);
+        	                //window.location = "result.html?id=" + json.parameters[0];
+        	                sessionStorage.setItem("id", json.parameters[0]);
+        	                window.location = "result.html";
+        	            } else {
+        	                alert("error when save your score");
+        	                clearInterval(countdownTimer);
+        	                //$.mobile.changePage ("home.html");
+        	                window.location = "home.html";
+        	            }
+        	            checkGetResponse = false;
+        	        } 
+        	    });
+        	}
         
         	function cancelExam() {
         	    $.ajax({
@@ -232,7 +259,8 @@ Loading Question...
         	        $("#select").selectmenu("refresh", true);
         	        checkGetResponse = false;
         	    } else {
-
+        	        //change page
+        	        sendAnswer();
         	    }
         	};
         	 //when user tap next question button
