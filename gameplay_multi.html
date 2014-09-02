@@ -184,6 +184,8 @@ Loading Question...
 	    	 //get current question and answer that user input
 	    	 //load question for next
 	    	loadNextQuestion = function() {
+	    		$("#next_question").removeClass("ui-enabled");
+			$("#next_question").addClass("ui-disabled");
 	    	    var question_info = {
 	    	        email: sessionStorage.getItem("email"),
 	    	        current_question_order: client_current_question_order,
@@ -195,6 +197,8 @@ Loading Question...
 	    	        dataType: 'jsonp',
 	    	        data: question_info,
 	    	        success: function(json) {
+	    	        	$("#next_question").removeClass("ui-disabled");
+				$("#next_question").addClass("ui-enabled");
 	    	            if (json.statusCode == 3) {
 	    	                clearInterval(countdownTimer);
 	    	                clearInterval(countdownTimer2);
@@ -216,7 +220,9 @@ Loading Question...
 	    	            checkGetResponse = false;
 	    	        },
 	    	        error: function() {
-	    	            alert("Error1");
+	    	        	$("#next_question").removeClass("ui-disabled");
+				$("#next_question").addClass("ui-enabled");
+	    	            alert("Cannot connect to server");
 	    	        }
 	    	    });
 	    	};
