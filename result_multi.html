@@ -1,171 +1,175 @@
 <!-- Copyright (c) 2012 Mobile Developer Solutions -->
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-	<link rel="stylesheet" href="my_theme.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
-	<script src="jquery-1.11.1.min.js"></script>
-	<script src="jquery.mobile-1.4.3.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<style type=text/css>
-		/* style for text */
-		.text {
-			color: #000000;
-			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
-			padding: 13px 20px;
-			font-size: 19px;
-			margin: 0px auto;
-			text-align: center;
-		}
-		
-		body {
-			background-color: "#f0eff6";
-		}
-		.rightMenu {
-			position: absolute;
-			top:-10%;   
-			right:-2%;
-			width: 100px !important;
-		}
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" name="viewport">
+    <link href="my_theme.min.css" rel="stylesheet">
+    <link href="jquery.mobile.icons.min.css" rel="stylesheet">
+    <link href="jquery.mobile.structure-1.4.3.min.css" rel="stylesheet">
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile-1.4.3.min.js"></script>
+    <script charset="utf-8" src="cordova-1.5.0.js" type="text/javascript"></script>
+    <script charset="utf-8" src="cordova.js" type="text/javascript"></script>
+    <script charset="utf-8" src="phonegap.js" type="text/javascript"></script>
+    <style type="text/css">
+    /* style for text */
+        .text {
+            color: #000000;
+            text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+            padding: 13px 20px;
+            font-size: 19px;
+            margin: 0px auto;
+            text-align: center;
+        }
+        
+        body {
+            background-color: "#f0eff6";
+        }
+        .rightMenu {
+            position: absolute;
+            top:-10%;   
+            right:-2%;
+            width: 100px !important;
+        }
 
-		.rightMenu .ui-collapsible-content .ui-listview {
-			margin: -10px -15px -10px -35px !important;
-		}
-		.horizontalRule {
-			min-height: 1px;
-			clear:both; width:100%;
-			border-bottom:1px solid #d1d1d1;
-			height:1px; 
-			padding-top:2px;
-			margin-bottom:10px;
-		}
-		
-		table{
-			border:none;
-			border-spacing:25px 8px;
-		}
-		
-		#rrr{
-			font: normal 12px 'Open Sans', sans-serif;
-			margin-top: 20px;
-		}
-		ul.countdown {
-			list-style: none;
-			margin: 15px 0;
-			padding: 0;
-			display: block;
-			text-align: center;
-		}
-		ul.countdown li {
-			display: inline-block;
-		}
-		ul.countdown li span {
-			font-size: 50px;
-			font-weight: 300;
-			line-height: 80px;
-		}
-		ul.countdown li.seperator {
-			font-size: 80px;
-			line-height: 70px;
-			vertical-align: top;
-		}
-		ul.countdown li p {
-			color: #a7abb1;
-			font-size: 14px;
-		}
-		.yellow {
-			color: yellow;
-		}
-		.blue {
-			color: blue;
-		}
-		.green {
-			color: green;
-		}
-		.gray {
-			color: gray;
-		}
-		.red {
-			color: red;
-		}
+        .rightMenu .ui-collapsible-content .ui-listview {
+            margin: -10px -15px -10px -35px !important;
+        }
+        .horizontalRule {
+            min-height: 1px;
+            clear:both; width:100%;
+            border-bottom:1px solid #d1d1d1;
+            height:1px; 
+            padding-top:2px;
+            margin-bottom:10px;
+        }
+        
+        table{
+            border:none;
+            border-spacing:25px 8px;
+        }
+        
+        #rrr{
+            font: normal 12px 'Open Sans', sans-serif;
+            margin-top: 20px;
+        }
+        ul.countdown {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+            display: block;
+            text-align: center;
+        }
+        ul.countdown li {
+            display: inline-block;
+        }
+        ul.countdown li span {
+            font-size: 50px;
+            font-weight: 300;
+            line-height: 80px;
+        }
+        ul.countdown li.seperator {
+            font-size: 80px;
+            line-height: 70px;
+            vertical-align: top;
+        }
+        ul.countdown li p {
+            color: #a7abb1;
+            font-size: 14px;
+        }
+        .yellow {
+            color: yellow;
+        }
+        .blue {
+            color: blue;
+        }
+        .green {
+            color: green;
+        }
+        .gray {
+            color: gray;
+        }
+        .red {
+            color: red;
+        }
 
-	</style>
+    </style>
+
+    <title></title>
 </head>
+
 <body>
-<div data-role=page id=home>
-	<div data-role=header >
-		<h1>Game Result</h1>
-	</div>
-	<div data-role=content>
-		<p class="text" style="color: blue">Your Score:</p>
-		<div style=' margin: 6px 15px 15px 15px; '>
-			<p class="text" id="correct" style='font-size: 100px; padding: 15px; background: white; width: 120px; height: 120px;border-radius: 15px; text-align: center;'></p>
-		</div>
-		<p class="text" style="font-size: 15px;" id="email">Email:</p>
-		<p class="text" style="font-size: 15px;" id= "time">Time:</p>
-		<p class="text" style="font-size: 15px;" id = "mode">Mode:</p>
-		<p class="text" style="font-size: 15px;" id="exp">Exp:</p>
-		<p>
-			<a href=home.html data-role=button data-icon=back id="back_to_home" rel=external> Back to Home </a>
-		</p>
-	</div>
-	<div data-role=footer  data-position="fixed" >
-		<h1>Mistake Chasing Game (c) 2014</h1>
-	</div>
-	<script>
-		var user_info = {
-			email: sessionStorage.getItem("email"),
-			total: sessionStorage.getItem("total"),
-			room_id: sessionStorage.getItem("room_id")
-		};
-		$.ajax({
-			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result_multi",
-			 dataType: 'jsonp',
-			 data: user_info,
-			 success: function(json){
-				 if (json.statusCode == 0) {
-					$("#correct").text(json.parameters[0].score);
-					$("#correct").removeClass();
-					$("#correct").addClass("text");
-					
-					if (json.parameters[0].score >= 9)
-						$("#correct").addClass("yellow");
-					else if (json.parameters[0].score >= 7)
-						$("#correct").addClass("blue");
-					else if (json.parameters[0].score >= 5)
-						$("#correct").addClass("green");
-					else if (json.parameters[0].score >= 3)
-						$("#correct").addClass("gray");
-					else {
-						$("#correct").addClass("red");
-					}
-					$("#email").text("Email: " + json.parameters[0].email);
-					var date = new Date(json.parameters[0].timestamp);
-					var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-					$("#time").text("Time: " + dateString);
-					var mode = "Single Player";
-					if (json.parameters[0].mode == 1)
-						mode = "Multiplayer"
-					$("#mode").text("Mode: " + mode);
-					if (json.parameters[0].exp >= 0) {
-						$("#exp").text("Exp: +" + json.parameters[0].exp);
-					} else {
-						$("#exp").text("Exp: " + json.parameters[0].exp);
-					}
-				 } else {
-					 alert("ERROR");
-				 }
-			 },
-			 error:function(){
-				 alert("Error");
-			 }      
-		});
-	</script>
-</div>
+    <div data-role="page" id="home">
+        <div data-role="header">
+            <h1>Game Result</h1>
+        </div>
+
+        <div data-role="content">
+            <p class="text" style="color: blue">Your Score:</p>
+
+            <div style=' margin: 6px 15px 15px 15px;'>
+                <p class="text" id="correct" style='font-size: 100px; padding: 15px; background: white; width: 120px; height: 120px;border-radius: 15px; text-align: center;'></p>
+            </div>
+
+            <p class="text" id="email" style="font-size: 15px;">Email:</p>
+
+            <p class="text" id="time" style="font-size: 15px;">Time:</p>
+
+            <p class="text" id="mode" style="font-size: 15px;">Mode:</p>
+
+            <p class="text" id="exp" style="font-size: 15px;">Exp:</p>
+
+            <p><a data-icon="back" data-role="button" href="home.html" id="back_to_home" rel="external">Back to Home</a></p>
+        </div>
+
+        <div data-position="fixed" data-role="footer">
+            <h1>Mistake Chasing Game (c) 2014</h1>
+        </div>
+        <script>
+            var user_info = {
+                email: sessionStorage.getItem("email"),
+                total: sessionStorage.getItem("total"),
+                room_id: sessionStorage.getItem("room_id")
+            };
+            $.ajax({
+                url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/result_multi",
+                dataType: 'jsonp',
+                data: user_info,
+                success: function(json) {
+                    if (json.statusCode == 0) {
+                        $("#correct").text(json.parameters[0].score);
+                        $("#correct").removeClass();
+                        $("#correct").addClass("text");
+                        if (json.parameters[0].score >= 9) $("#correct").addClass("yellow");
+                        else if (json.parameters[0].score >= 7) $("#correct").addClass("blue");
+                        else if (json.parameters[0].score >= 5) $("#correct").addClass("green");
+                        else if (json.parameters[0].score >= 3) $("#correct").addClass("gray");
+                        else {
+                            $("#correct").addClass("red");
+                        }
+                        $("#email").text("Email: " + json.parameters[0].email);
+                        var date = new Date(json.parameters[0].timestamp);
+                        var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                        $("#time").text("Time: " + dateString);
+                        var mode = "Single Player";
+                        if (json.parameters[0].mode == 1) mode = "Multiplayer"
+                        $("#mode").text("Mode: " + mode);
+                        if (json.parameters[0].exp >= 0) {
+                            $("#exp").text("Exp: +" + json.parameters[0].exp);
+                        } else {
+                            $("#exp").text("Exp: " + json.parameters[0].exp);
+                        }
+                    } else {
+                        alert("ERROR");
+                    }
+                },
+                error: function() {
+                    alert("Error");
+                }
+            });
+        </script>
+    </div>
 </body>
 </html>
-
