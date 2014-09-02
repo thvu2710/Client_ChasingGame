@@ -171,10 +171,7 @@
         document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
-			document.addEventListener("backbutton", function (e) {
-		            navigator.app.backHistory() ;
-		        }, false );
-			alert("device ready 5");
+
 
 		    $("#exit").bind("click", function(event) {
 		        navigator.app.exitApp();
