@@ -169,76 +169,74 @@
     </div>
     <script>
         document.addEventListener("deviceready", onDeviceReady, false);
+	function onDeviceReady() {
+	    document.addEventListener("backbutton", function (e) {
+		//prevent back button, if click back button, show sign out confirm dialog
+	        logout();
+	    }, false );
+	    var user_info = {
+	        email: sessionStorage.getItem("email")
+	    };
 
-		function onDeviceReady() {
-
-
-		    $("#exit").bind("click", function(event) {
-		        navigator.app.exitApp();
-		    });
-		    var user_info = {
-		        email: sessionStorage.getItem("email")
-		    };
-
-		    function logout() {
-		        var r = confirm("Are you sure to logout?");
-		        if (r == false) {
-		            return;
-		        }
-		        $("#btnLogout").removeClass("ui-enabled");
-		        $("#btnLogout").addClass("ui-disabled");
-		        $.ajax({
-		            url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/logout",
-		            dataType: 'jsonp',
-		            data: user_info,
-		            success: function(json) {
-		                if (json.statusCode == 0) {
-		                    alert("Sorry, cannot logout cause server is down now, please try again after a few minute");
-		                } else {
-		                    alert("Logout succesfully");
-		                    window.location = "index.html";
-		                }
-		                $("#btnLogout").removeClass("ui-disabled");
-		                $("#btnLogout").addClass("ui-enabled");
-		            },
-		            error: function() {
-		                alert("Error");
-		            }
-		        });
-		    }
-		    $("#btnLogout").bind("click", function(event) {
-		        logout();
-		    });
-		    $.ajax({
-		        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/home",
-		        dataType: 'jsonp',
-		        data: user_info,
-		        success: function(json) {
-		            var parameters = json.parameters;
-		            var userInfo = parameters[0];
-		            var exp = 20 - (userInfo.total_exp % 20);
-		            $("#email").text(userInfo.email);
-		            $("#age").text(userInfo.date_of_birth);
-		            $("#firstname").text(userInfo.firstname.toUpperCase());
-		            $("#lastname").text(userInfo.lastname.toUpperCase());
-		            $("#lv").text(parseInt(userInfo.total_exp / 20));
-		            $("#exp").text(exp);
-		            var result = parameters[1];
-		            if (result != null) {
-		                $("#best_score").text(result.score);
-		                var date = new Date(result.timestamp);
-		                var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-		                $("#last_play").text(dateString);
-		            } else {
-		                $("#best_score").text("N/A");
-		                $("#last_play").text("N/A");
-		            }
-		        },
-		        error: function() {
-		            alert("Error");
-		        }
-		    });
-		}
+	    function logout() {
+	        var r = confirm("Are you sure to logout?");
+	        if (r == false) {
+	            return;
+	        }
+	        $("#btnLogout").removeClass("ui-enabled");
+	        $("#btnLogout").addClass("ui-disabled");
+	        $.ajax({
+	            url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/logout",
+	            dataType: 'jsonp',
+	            data: user_info,
+	            success: function(json) {
+	                if (json.statusCode == 0) {
+	                    alert("Sorry, cannot logout cause server is down now, please try again after a few minute");
+	                } else {
+	                    alert("Logout succesfully");
+	                    window.location = "index.html";
+	                }
+	                $("#btnLogout").removeClass("ui-disabled");
+	                $("#btnLogout").addClass("ui-enabled");
+	            },
+	            error: function() {
+	                alert("Error");
+	            }
+	        });
+	    }
+	    $("#btnLogout").bind("click", function(event) {
+	        logout();
+	    });
+	    $.ajax({
+	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/home",
+	        dataType: 'jsonp',
+	        data: user_info,
+	        success: function(json) {
+	            var parameters = json.parameters;
+	            var userInfo = parameters[0];
+	            var exp = 20 - (userInfo.total_exp % 20);
+	            $("#email").text(userInfo.email);
+	            $("#age").text(userInfo.date_of_birth);
+	            $("#firstname").text(userInfo.firstname.toUpperCase());
+	            $("#lastname").text(userInfo.lastname.toUpperCase());
+	            $("#lv").text(parseInt(userInfo.total_exp / 20));
+	            $("#exp").text(exp);
+	            var result = parameters[1];
+	            if (result != null) {
+	                $("#best_score").text(result.score);
+	                var date = new Date(result.timestamp);
+	                var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+	                $("#last_play").text(dateString);
+	            } else {
+	                $("#best_score").text("N/A");
+	                $("#last_play").text("N/A");
+	            }
+	        },
+	        error: function() {
+	            alert("Error");
+	        }
+	    });
+	}
     </script>
 </body>
 </html>
