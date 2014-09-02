@@ -87,35 +87,35 @@
 
 <body>
     <div data-role="page" id="page1">
-        <div data-role="header">
-            <h1>Register room</h1><a class="ui-btn-left" data-icon="back" data-role="button" href="#" id="back">Back</a>
-        </div>
-
-        <div data-role="content" data-role="tabs">
-            <div data-iconpos="top" data-role="navbar">
-                <ul>
-                    <li>
-                        <a class="ui-btn-active" data-icon="check" href="#john_a_room" id="getAvailableRooom">Available room</a>
-                    </li>
-
-                    <li>
-                        <a data-icon="plus" href="#create_new_room">Create new room</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div id="john_a_room">
-                <ol data-inset="true" data-role="listview"></ol>
-            </div>
-
-            <div id="create_new_room">
-                <p class="text" style="color: blue; padding-left: 40px; text-align: left">Type the name of your room:<br>
-                <input id="tfName" placeholder="Name of room" type="text"></p>
-
-                <p class="text" style="color: blue; padding-left: 40px; text-align: left">Min of players to start game:<br>
-                <input id="tfMax" placeholder="Max player of room" type="number"></p><a data-role="button" href="#" id="btn_create_room">Create Room</a>
-            </div>
-        </div>
+	<div data-role="header">
+		<h1>Register room</h1>
+		<a href=# data-role=button class="ui-btn-left" data-icon=back id=back> Back </a>
+	</div>
+	<div data-role="content">
+		<div data-role="tabs">
+			<div data-role="navbar" data-iconpos="top" >
+				<ul>
+					<li><a data-icon="check" class="ui-btn-active" href="#john_a_room" id="getAvailableRooom">Available room</a></li>
+					<li><a data-icon="plus" href="#create_new_room">Create new room</a></li>
+				</ul>
+			</div>
+			<div id="john_a_room">
+				<ol data-role="listview" data-inset="true">
+					
+				</ol>
+			</div>
+			<div id="create_new_room">
+			<p class="text" style="color: blue; padding-left: 40px; text-align: left">Type the name of your room:<br />
+				<input type=text placeholder="Name of room" id="tfName">
+			</p>
+			<p class="text" style="color: blue; padding-left: 40px; text-align: left">Min of players to start game:<br />
+				<input type="number" placeholder="Max player of room" id="tfMax">
+			</p>
+			
+			<a href=# data-role=button id=btn_create_room> Create Room </a>
+			</div>
+		</div>
+	</div>
     	<div data-role=footer data-position="fixed">
 		    <h1>Mistake Chasing Game (c) 2014</h1>
 	    </div>
