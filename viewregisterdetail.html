@@ -1,184 +1,172 @@
 <!-- Copyright (c) 2012 Mobile Developer Solutions -->
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-	<link rel="stylesheet" href="my_theme.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
-	<script src="jquery-1.11.1.min.js"></script>
-	<script src="jquery.mobile-1.4.3.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<style type=text/css>
-		/* style for text */
-		.text {
-			color: #000000;
-			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
-			padding: 13px 20px;
-			font-size: 19px;
-			margin: 0px auto;
-			text-align: center;
-		}
-		
-		body {
-			background-color: "#f0eff6";
-		}
-		.rightMenu {
-			position: absolute;
-			top:-10%;   
-			right:-2%;
-			width: 100px !important;
-		}
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" name="viewport">
+    <link href="my_theme.min.css" rel="stylesheet">
+    <link href="jquery.mobile.icons.min.css" rel="stylesheet">
+    <link href="jquery.mobile.structure-1.4.3.min.css" rel="stylesheet">
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile-1.4.3.min.js"></script>
+    <script charset="utf-8" src="cordova-1.5.0.js" type="text/javascript"></script>
+    <script charset="utf-8" src="cordova.js" type="text/javascript"></script>
+    <script charset="utf-8" src="phonegap.js" type="text/javascript"></script>
+    <style type="text/css">
+    /* style for text */
+        .text {
+            color: #000000;
+            text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+            padding: 13px 20px;
+            font-size: 19px;
+            margin: 0px auto;
+            text-align: center;
+        }
+        
+        body {
+            background-color: "#f0eff6";
+        }
+        .rightMenu {
+            position: absolute;
+            top:-10%;   
+            right:-2%;
+            width: 100px !important;
+        }
 
-		.rightMenu .ui-collapsible-content .ui-listview {
-			margin: -10px -15px -10px -35px !important;
-		}
-		.horizontalRule {
-			min-height: 1px;
-			clear:both; width:100%;
-			border-bottom:1px solid #d1d1d1;
-			height:1px; 
-			padding-top:2px;
-			margin-bottom:10px;
-		}
-		
-		table{
-			border:none;
-			border-spacing:25px 8px;
-		}
-		
-		#rrr{
-			font: normal 12px 'Open Sans', sans-serif;
-			margin-top: 20px;
-		}
-		ul.countdown {
-			list-style: none;
-			margin: 15px 0;
-			padding: 0;
-			display: block;
-			text-align: center;
-		}
-		ul.countdown li {
-			display: inline-block;
-		}
-		ul.countdown li span {
-			font-size: 50px;
-			font-weight: 300;
-			line-height: 80px;
-		}
-		ul.countdown li.seperator {
-			font-size: 80px;
-			line-height: 70px;
-			vertical-align: top;
-		}
-		ul.countdown li p {
-			color: #a7abb1;
-			font-size: 14px;
-		}
+        .rightMenu .ui-collapsible-content .ui-listview {
+            margin: -10px -15px -10px -35px !important;
+        }
+        .horizontalRule {
+            min-height: 1px;
+            clear:both; width:100%;
+            border-bottom:1px solid #d1d1d1;
+            height:1px; 
+            padding-top:2px;
+            margin-bottom:10px;
+        }
+        
+        table{
+            border:none;
+            border-spacing:25px 8px;
+        }
+        
+        #rrr{
+            font: normal 12px 'Open Sans', sans-serif;
+            margin-top: 20px;
+        }
+        ul.countdown {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+            display: block;
+            text-align: center;
+        }
+        ul.countdown li {
+            display: inline-block;
+        }
+        ul.countdown li span {
+            font-size: 50px;
+            font-weight: 300;
+            line-height: 80px;
+        }
+        ul.countdown li.seperator {
+            font-size: 80px;
+            line-height: 70px;
+            vertical-align: top;
+        }
+        ul.countdown li p {
+            color: #a7abb1;
+            font-size: 14px;
+        }
 
-	</style>
+    </style>
+
+    <title></title>
 </head>
-<body>
-<div data-role=page id=info>
-	<div data-role=header>
-		<h1>Register Detail</h1>
-		<a href=game_history_multi.html data-role=button class="ui-btn-left" data-icon=back rel=external> Back </a>
-	</div>
-	<div data-role=content>
-		<p class="text" style="color: blue;">GAME HISTORY</p>
-		<div class="horizontalRule">
-		</div>
-		<div style="margin: 0 auto; text-align: center">
-		Room name: <span id=room_name></span><br />
-		User Created: <span id=user_created></span><br />
-		Time Created: <span id=time_created></span><br />
-		Status: <span id=status></span><br />
-		<br />
-		<span class=text style="color: blue;">LIST OF CHASING REGISTER THIS ROOM</span><br />
-		<table data-role="table" id="movie-table" data-mode="reflow" class="ui-responsive table-stroke">
-		  <thead>
-			<tr>
-			  <th data-priority="1">Order</th>
-			  <th data-priority="2">Email</th>
-			  <th data-priority="3">Score</th>
-			<th data-priority="4">EXP</th>
-			</tr>
-		  </thead>
-		  <tbody>
 
-		  </tbody>
-		</table>
-		</div>
-	</div>
-	<div data-role=footer  data-position="fixed">
-		<h1>Mistake Chasing Game (c) 2014</h1>
-	</div>
-	
-	<script>
-		function parse(val) {
-			var result = "Not found",
-				tmp = [];
-			location.search
-			//.replace ( "?", "" ) 
-			// this is better, there might be a question mark inside
-			.substr(1)
-				.split("&")
-				.forEach(function (item) {
-				tmp = item.split("=");
-				if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
-			});
-			return result;
-		}
-	
-		var user_info = {
-			email:sessionStorage.getItem("email"),
-			timestamp:sessionStorage.getItem('timestamp')
-		};
-		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/viewRegister",
-		     dataType: 'jsonp',
-		     data: user_info,
-		     success: function(json){
-				var current_room = json.parameters[0];
-				$("#room_name").text(current_room.room_name);
-				var date = new Date(current_room.time_created);
-				var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-				$("#time_created").text(dateString);
-				$("#user_created").text(current_room.user_created);
-				if (current_room.started == 0)
-					$("#status").text("Open");
-				else if (current_room.started == 1)
-					$("#status").text("In Playing");
-				else
-					$("#status").text("Closed");
-					
-				var result_list = json.parameters[1];
-				for (var i = 0; i < current_room.register_list.length; i++) {
-					var hasScore = false;
-					var score;
-					var exp;
-					for (var j = 0; j < result_list.length; j++) {
-						if (result_list[j].email == current_room.register_list[i].email) {
-							score = result_list[j].score;
-							exp = result_list[j].exp;
-							hasScore = true;
-							break;
-						}
-					}
-					if (hasScore == true)
-						$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + current_room.register_list[i].email + "</td><td>" + score + "</td><td>" + exp + "</td></tr>");
-					else
-						$("tbody").append("<tr><th>" + (i+1) + "</th><td>" + current_room.register_list[i].email + "</td><td>N/A</td><td>N/A</td></tr>");
-				}
-				 $("table").table( "refresh" );
-		     },
-		     error:function(){
-		         alert("Error");
-		     }      
-		});
-	</script>
-</div>
+<body>
+    <div data-role="page" id="info">
+        <div data-role="header">
+            <h1>Register Detail</h1><a class="ui-btn-left" data-icon="back" data-role="button" href="game_history_multi.html" rel="external">Back</a>
+        </div>
+
+        <div data-role="content">
+            <p class="text" style="color: blue;">GAME HISTORY</p>
+
+            <div class="horizontalRule"></div>
+
+            <div style="margin: 0 auto; text-align: center">
+                Room name: <span id="room_name"></span><br>
+                User Created: <span id="user_created"></span><br>
+                Time Created: <span id="time_created"></span><br>
+                Status: <span id="status"></span><br>
+                <br>
+                <span class="text" style="color: blue;">LIST OF CHASING REGISTER THIS ROOM</span><br>
+
+                <table class="ui-responsive table-stroke" data-mode="reflow" data-role="table" id="movie-table">
+                    <thead>
+                        <tr>
+                            <th data-priority="1">Order</th>
+
+                            <th data-priority="2">Email</th>
+
+                            <th data-priority="3">Score</th>
+
+                            <th data-priority="4">EXP</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div data-position="fixed" data-role="footer">
+            <h1>Mistake Chasing Game (c) 2014</h1>
+        </div>
+        <script>
+    		var user_info = {
+    		    email: sessionStorage.getItem("email"),
+    		    timestamp: sessionStorage.getItem('timestamp')
+    		};
+    		$.ajax({
+    		    url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/viewRegister",
+    		    dataType: 'jsonp',
+    		    data: user_info,
+    		    success: function(json) {
+    		        var current_room = json.parameters[0];
+    		        $("#room_name").text(current_room.room_name);
+    		        var date = new Date(current_room.time_created);
+    		        var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    		        $("#time_created").text(dateString);
+    		        $("#user_created").text(current_room.user_created);
+    		        if (current_room.started == 0) $("#status").text("Open");
+    		        else if (current_room.started == 1) $("#status").text("In Playing");
+    		        else $("#status").text("Closed");
+    		        var result_list = json.parameters[1];
+    		        for (var i = 0; i < current_room.register_list.length; i++) {
+    		            var hasScore = false;
+    		            var score;
+    		            var exp;
+    		            for (var j = 0; j < result_list.length; j++) {
+    		                if (result_list[j].email == current_room.register_list[i].email) {
+    		                    score = result_list[j].score;
+    		                    exp = result_list[j].exp;
+    		                    hasScore = true;
+    		                    break;
+    		                }
+    		            }
+    		            if (hasScore == true) $("tbody").append("<tr><th>" + (i + 1) + "</th><td>" + current_room.register_list[i].email + "</td><td>" + score + "</td><td>" + exp + "</td></tr>");
+    		            else $("tbody").append("<tr><th>" + (i + 1) + "</th><td>" + current_room.register_list[i].email + "</td><td>N/A</td><td>N/A</td></tr>");
+    		        }
+    		        $("table").table("refresh");
+    		    },
+    		    error: function() {
+    		        alert("Error");
+    		    }
+    		});
+        </script>
+    </div>
 </body>
 </html>
