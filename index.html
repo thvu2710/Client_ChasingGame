@@ -97,7 +97,8 @@
 
             <p class="text" style="font-size: 15px;"><a href="reset_password.html" style="text-decoration: none; color: #d10000;">Forgot Password?</a></p>
 
-            <p><a data-icon="plus" data-role="button" href="signup.html" rel="external">SIGN UP NEW ACCOUNT</a> <a data-role="button" href="instruction.html" rel="external">HOW TO PLAY</a></p>
+            <p><a data-icon="plus" data-role="button" href="signup.html" rel="external" id=signup>SIGN UP NEW ACCOUNT</a>
+            <a data-role="button" href="instruction.html" rel="external" id=how>HOW TO PLAY</a></p>
         </div>
 
         <div data-position="fixed" data-role="footer">
@@ -124,6 +125,11 @@
 	        };
 	        $("#signin").removeClass("ui-enabled");
 	        $("#signin").addClass("ui-disabled");
+	        $("#signup").removeClass("ui-enabled");
+	        $("#signup").addClass("ui-disabled");
+	        $("#how").removeClass("ui-enabled");
+	        $("#how").addClass("ui-disabled");
+	        
 	        $.ajax({
 	            url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/login",
 	            dataType: 'json',
@@ -144,11 +150,19 @@
 	                }
 	                $("#signin").removeClass("ui-disabled");
 	                $("#signin").addClass("ui-enabled");
+	                $("#signup").removeClass("ui-disabled");
+	                $("#signup").addClass("ui-enabled");
+	                $("#how").removeClass("ui-disabled");
+	                $("#how").addClass("ui-enabled");
 	            },
 	            error: function() {
 	                alert("Error cannot connect to server, please try again");
 	                $("#signin").removeClass("ui-disabled");
 	                $("#signin").addClass("ui-enabled");
+	                $("#signup").removeClass("ui-disabled");
+	                $("#signup").addClass("ui-enabled");
+	                $("#how").removeClass("ui-disabled");
+	                $("#how").addClass("ui-enabled");
 	            }
 	        });
 	    });
