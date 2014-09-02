@@ -106,6 +106,9 @@
     </div>
     <script>
 	document.addEventListener("deviceReady", deviceReady, false);
+		document.addEventListener("pagebeforehide", function (e) {
+			alert("kaka");
+		}, false );
 
 	function deviceReady() {
 		alert("device ready 45");
