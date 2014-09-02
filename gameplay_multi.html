@@ -1,290 +1,290 @@
 <!-- Copyright (c) 2012 Mobile Developer Solutions -->
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-	<link rel="stylesheet" href="my_theme.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.icons.min.css" />
-	<link rel="stylesheet" href="jquery.mobile.structure-1.4.3.min.css" />
-	<script src="jquery-1.11.1.min.js"></script>
-	<script src="jquery.mobile-1.4.3.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
-	<style type=text/css>
-		/* style for text */
-		.text {
-			color: #000000;
-			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
-			padding: 13px 20px;
-			font-size: 19px;
-			margin: 0px auto;
-			text-align: center;
-		}
-		
-		body {
-			background-color: "#f0eff6";
-		}
-		.rightMenu {
-			position: absolute;
-			top:-10%;   
-			right:-2%;
-			width: 100px !important;
-		}
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" name="viewport">
+    <link href="my_theme.min.css" rel="stylesheet">
+    <link href="jquery.mobile.icons.min.css" rel="stylesheet">
+    <link href="jquery.mobile.structure-1.4.3.min.css" rel="stylesheet">
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile-1.4.3.min.js"></script>
+    <script charset="utf-8" src="cordova-1.5.0.js" type="text/javascript"></script>
+    <style type="text/css">
+    /* style for text */
+        .text {
+            color: #000000;
+            text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.7);
+            padding: 13px 20px;
+            font-size: 19px;
+            margin: 0px auto;
+            text-align: center;
+        }
+        
+        body {
+            background-color: "#f0eff6";
+        }
+        .rightMenu {
+            position: absolute;
+            top:-10%;   
+            right:-2%;
+            width: 100px !important;
+        }
 
-		.rightMenu .ui-collapsible-content .ui-listview {
-			margin: -10px -15px -10px -35px !important;
-		}
-		.horizontalRule {
-			min-height: 1px;
-			clear:both; width:100%;
-			border-bottom:1px solid #d1d1d1;
-			height:1px; 
-			padding-top:2px;
-			margin-bottom:10px;
-		}
-		
-		table{
-			border:none;
-			border-spacing:25px 8px;
-		}
-		
-		#rrr{
-			font: normal 12px 'Open Sans', sans-serif;
-		}
-		ul.countdown {
-			list-style: none;
-			padding: 0;
-			display: block;
-			text-align: center;
-		}
-		ul.countdown li {
-			display: inline-block;
-		}
-		ul.countdown li span {
-			font-size: 50px;
-		}
-		ul.countdown li.seperator {
-			font-size: 50px;
-			line-height: 50px;
-			vertical-align: top;
-		}
-		ul.countdown li p {
-			color: #a7abb1;
-			font-size: 10px;
-		}
+        .rightMenu .ui-collapsible-content .ui-listview {
+            margin: -10px -15px -10px -35px !important;
+        }
+        .horizontalRule {
+            min-height: 1px;
+            clear:both; width:100%;
+            border-bottom:1px solid #d1d1d1;
+            height:1px; 
+            padding-top:2px;
+            margin-bottom:10px;
+        }
+        
+        table{
+            border:none;
+            border-spacing:25px 8px;
+        }
+        
+        #rrr{
+            font: normal 12px 'Open Sans', sans-serif;
+        }
+        ul.countdown {
+            list-style: none;
+            padding: 0;
+            display: block;
+            text-align: center;
+        }
+        ul.countdown li {
+            display: inline-block;
+        }
+        ul.countdown li span {
+            font-size: 50px;
+        }
+        ul.countdown li.seperator {
+            font-size: 50px;
+            line-height: 50px;
+            vertical-align: top;
+        }
+        ul.countdown li p {
+            color: #a7abb1;
+            font-size: 10px;
+        }
 
-	</style>
+    </style>
+
+    <title></title>
 </head>
+
 <body>
-<div data-role=page data-dom-cache="false" id=home>
-	<div data-role=header  data-add-back-btn=true>
-		<h1>Multiplayer</h1>
-	</div>
-	<div data-role=content id="rrr">
-	<ul class="back countdown">
-		<li> <span class="hours" style="color: blue;">00</span>
-			<p class="hours_ref">hours</p>
-		</li>
-		<li class="seperator">:</li>
-		<li> <span class="minutes" style="color: blue;">00</span>
-			<p class="minutes_ref">minutes</p>
-		</li>
-		<li class="seperator">:</li>
-		<li> <span class="seconds" style="color: blue;">00</span>
-			<p class="seconds_ref">seconds</p>
-		</li>
-	</ul>
-		<p class="text" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;" id="question_number" >Question</p>
-		<pre style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px; " id="question">Loading Question...</pre>
-		<span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px"> Choose the true answer : </span>
-		<select data-native-menu=false id="select">
-		</select>
-		<p>
-			<a href=# data-role=button data-theme=e data-icon=check id=next_question> Next Question
-			</a>
-		</p>
-		<div id=question_status_list style = "margin: 0 auto">
-			
-		</div>
-	</div>
-	<div data-role=footer  data-position="fixed">
-		<h1>Mistake Chasing Game (c) 2013</h1>
-	</div>
+    <div data-dom-cache="false" data-role="page" id="home">
+        <div data-add-back-btn="true" data-role="header">
+            <h1>Multiplayer</h1>
+        </div>
 
-	<div data-role="popup" id="popupBasic">
-		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-		<p>Question ? <br />answered by ?</br>at ?<p>
-	</div>
-	<script>
-	var total_my_question = 0;
-	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
-	var seconds = 300;
-	var countdownTimer;
-	var countdownTimer2;
-	var checkGetResponse = false;
-	
-	var room_id = sessionStorage.getItem("room_id");
+        <div data-role="content" id="rrr">
+            <ul class="back countdown">
+                <li>
+                    <span class="hours" style="color: blue;">00</span>
 
-	function secondPassed() {
-		var minutes = Math.round((seconds - 30)/60);
-		var remainingSeconds = seconds % 60;
-		if (remainingSeconds < 10) {
-			remainingSeconds = "0" + remainingSeconds; 
-		}
-		if (minutes < 10) {
-			minutes = "0" + minutes;
-		}
-		$(".minutes").text(minutes);
-		$(".seconds").text(remainingSeconds);
-		if (seconds == 0) {
-			clearInterval(countdownTimer);
-			window.location = "result_multi.html";
-			sessionStorage.setItem("total", total_my_question);
-		} else {
-			seconds--;
-		}
-	};
-	
-	//first load question after showing gameplay page
-	loadFirstQuestion = function() {
-		var question_info = {
-			email: sessionStorage.getItem("email"),
-			room_id: room_id
-		};
-		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
-		     dataType: 'jsonp',
-			 data: question_info,
-		     success: function(json){
-				var question = json.parameters[0];
-				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
-		    	$("#question").text(question.question);
-		    	var str = question.answer_list.split(" ");
-		    	for (var i = 0; i < str.length; i++) {
-		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-		    	}
-		    	$("#select").selectmenu("refresh", true);
-		    	countdownTimer = setInterval('secondPassed()', 1000);
-		     },
-		     error:function(){ //khoi tao lan dau bi loi, hoac reset lai session browser cung bi loi
-		         alert("Error0");
-		     }      
-		});
-	};
-	
-	//get current question and answer that user input
-	
-	//load question for next
-	loadNextQuestion = function() {
-		var question_info = {
-			email: sessionStorage.getItem("email"),
-			current_question_order: client_current_question_order,
-			answer:$("#select").val(),
-			room_id: room_id
-		};
-		
-		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
-		     dataType: 'jsonp',
-			 data: question_info,
-		     success: function(json){
-		    	if (json.statusCode == 3) {
-					clearInterval(countdownTimer);
-					clearInterval(countdownTimer2);
-		    		window.location = "result_multi.html";
-					sessionStorage.setItem("total", total_my_question);
-					checkGetResponse = false;
-		    		return;
-		    	}
-				var question = json.parameters[0];
-				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
-		    	$("#question").text(question.question);
-		    	var str = question.answer_list.split(" ");
-				$("#select").html("");
-		    	for (var i = 0; i < str.length; i++) {
-		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-		    	}
-		    	$("#select").selectmenu("refresh", true);
-				checkGetResponse = false;
-		     },
-		     error:function(){
-		         alert("Error1");
-		     }      
-		});
-	};
-	
-	//load next question only
-	loadNextQuestionOnly = function() {
-		var question_info = {
-			email: sessionStorage.getItem("email"),
-			current_question_order: client_current_question_order,
-			room_id: room_id
-		};
-		
-		$.ajax({
-		     url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
-		     dataType: 'jsonp',
-			 data: question_info,
-		     success: function(json){
-		    	if (json.parameters[0].length == 0) {
-					clearInterval(countdownTimer);
-					clearInterval(countdownTimer2);
-		    		window.location = "result_multi.html";
-					sessionStorage.setItem("total", total_my_question);
-					checkGetResponse = false;
-		    		return;
-		    	}
+                    <p class="hours_ref">hours</p>
+                </li>
 
-				var question = json.parameters[0];
-				client_current_question_order = question.id;
-		    	$("#question_number").text("Question: " + (++total_my_question) + "/10");
-		    	$("#question").text(question.question);
-		    	var str = question.answer_list.split(" ");
-				$("#select").html("");
-		    	for (var i = 0; i < str.length; i++) {
-		    		$("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-		    	}
-		    	$("#select").selectmenu("refresh", true);
-				checkGetResponse = false;
-		     },
-		     error:function(){
-		         alert("Error1");
-		     }      
-		});
-	};
-	
-	$("#next_question").bind("click", function() {
-		if (checkGetResponse == false) {
-			checkGetResponse = true;
-			loadNextQuestion();
-		}
-	});
-	
-	loadFirstQuestion();
-	var i = 0;
-	function frequentlyChecking() {
-		$.ajax({
-			 url:"http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
-			 dataType: 'jsonp',
-			 data: {client_current_question_order: client_current_question_order},
-			 success: function(json){
-				if (json.statusCode == 1) {
-					//next question
-					loadNextQuestionOnly();
-					alert("This question has been already answered by another one, you will be answered other question");
-				} else if (json.statusCode == 0) {
-				}
-			 },
-			 error:function(){
-				 alert("Error2");
-			 }
-		});
-	};
-	//countdownTimer2 = setInterval('frequentlyChecking()', 3000);
-</script>
-</div>
+                <li class="seperator">:</li>
+
+                <li>
+                    <span class="minutes" style="color: blue;">00</span>
+
+                    <p class="minutes_ref">minutes</p>
+                </li>
+
+                <li class="seperator">:</li>
+
+                <li>
+                    <span class="seconds" style="color: blue;">00</span>
+
+                    <p class="seconds_ref">seconds</p>
+                </li>
+            </ul>
+
+            <p class="text" id="question_number" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;">Question</p>
+            <pre id="question" style="background-color: #e8eef2; border-radius: 10px; border: 1px #8ad4fe solid; position: absolute: top: 50%; margin-top: 5px;">
+Loading Question...
+</pre><span class="text" style="font-size: 18px; color: blue; padding: 13px 0px; margin-left: 10px">Choose the true answer :</span> <select data-native-menu="false" id="select">
+                </select>
+
+            <p><a data-icon="check" data-role="button" data-theme="e" href="#" id="next_question">Next Question</a></p>
+
+            <div id="question_status_list" style="margin: 0 auto"></div>
+        </div>
+
+        <div data-position="fixed" data-role="footer">
+            <h1>Mistake Chasing Game (c) 2013</h1>
+        </div>
+        <script>
+	    	var total_my_question = 0;
+	    	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
+	    	var seconds = 300;
+	    	var countdownTimer;
+	    	var countdownTimer2;
+	    	var checkGetResponse = false;
+	    	var room_id = sessionStorage.getItem("room_id");
+	    
+	    	function secondPassed() {
+	    	    var minutes = Math.round((seconds - 30) / 60);
+	    	    var remainingSeconds = seconds % 60;
+	    	    if (remainingSeconds < 10) {
+	    	        remainingSeconds = "0" + remainingSeconds;
+	    	    }
+	    	    if (minutes < 10) {
+	    	        minutes = "0" + minutes;
+	    	    }
+	    	    $(".minutes").text(minutes);
+	    	    $(".seconds").text(remainingSeconds);
+	    	    if (seconds == 0) {
+	    	        clearInterval(countdownTimer);
+	    	        window.location = "result_multi.html";
+	    	        sessionStorage.setItem("total", total_my_question);
+	    	    } else {
+	    	        seconds--;
+	    	    }
+	    	};
+	    	 //first load question after showing gameplay page
+	    	loadFirstQuestion = function() {
+	    	    var question_info = {
+	    	        email: sessionStorage.getItem("email"),
+	    	        room_id: room_id
+	    	    };
+	    	    $.ajax({
+	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
+	    	        dataType: 'jsonp',
+	    	        data: question_info,
+	    	        success: function(json) {
+	    	            var question = json.parameters[0];
+	    	            client_current_question_order = question.id;
+	    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
+	    	            $("#question").text(question.question);
+	    	            var str = question.answer_list.split(" ");
+	    	            for (var i = 0; i < str.length; i++) {
+	    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+	    	            }
+	    	            $("#select").selectmenu("refresh", true);
+	    	            countdownTimer = setInterval('secondPassed()', 1000);
+	    	        },
+	    	        error: function() { //khoi tao lan dau bi loi, hoac reset lai session browser cung bi loi
+	    	            alert("Error0");
+	    	        }
+	    	    });
+	    	};
+	    	 //get current question and answer that user input
+	    	 //load question for next
+	    	loadNextQuestion = function() {
+	    	    var question_info = {
+	    	        email: sessionStorage.getItem("email"),
+	    	        current_question_order: client_current_question_order,
+	    	        answer: $("#select").val(),
+	    	        room_id: room_id
+	    	    };
+	    	    $.ajax({
+	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
+	    	        dataType: 'jsonp',
+	    	        data: question_info,
+	    	        success: function(json) {
+	    	            if (json.statusCode == 3) {
+	    	                clearInterval(countdownTimer);
+	    	                clearInterval(countdownTimer2);
+	    	                window.location = "result_multi.html";
+	    	                sessionStorage.setItem("total", total_my_question);
+	    	                checkGetResponse = false;
+	    	                return;
+	    	            }
+	    	            var question = json.parameters[0];
+	    	            client_current_question_order = question.id;
+	    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
+	    	            $("#question").text(question.question);
+	    	            var str = question.answer_list.split(" ");
+	    	            $("#select").html("");
+	    	            for (var i = 0; i < str.length; i++) {
+	    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+	    	            }
+	    	            $("#select").selectmenu("refresh", true);
+	    	            checkGetResponse = false;
+	    	        },
+	    	        error: function() {
+	    	            alert("Error1");
+	    	        }
+	    	    });
+	    	};
+	    	 //load next question only
+	    	loadNextQuestionOnly = function() {
+	    	    var question_info = {
+	    	        email: sessionStorage.getItem("email"),
+	    	        current_question_order: client_current_question_order,
+	    	        room_id: room_id
+	    	    };
+	    	    $.ajax({
+	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
+	    	        dataType: 'jsonp',
+	    	        data: question_info,
+	    	        success: function(json) {
+	    	            if (json.parameters[0].length == 0) {
+	    	                clearInterval(countdownTimer);
+	    	                clearInterval(countdownTimer2);
+	    	                window.location = "result_multi.html";
+	    	                sessionStorage.setItem("total", total_my_question);
+	    	                checkGetResponse = false;
+	    	                return;
+	    	            }
+	    	            var question = json.parameters[0];
+	    	            client_current_question_order = question.id;
+	    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
+	    	            $("#question").text(question.question);
+	    	            var str = question.answer_list.split(" ");
+	    	            $("#select").html("");
+	    	            for (var i = 0; i < str.length; i++) {
+	    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+	    	            }
+	    	            $("#select").selectmenu("refresh", true);
+	    	            checkGetResponse = false;
+	    	        },
+	    	        error: function() {
+	    	            alert("Error1");
+	    	        }
+	    	    });
+	    	};
+	    	$("#next_question").bind("click", function() {
+	    	    if (checkGetResponse == false) {
+	    	        checkGetResponse = true;
+	    	        loadNextQuestion();
+	    	    }
+	    	});
+	    	loadFirstQuestion();
+	    	var i = 0;
+	    
+	    	function frequentlyChecking() {
+	    	    $.ajax({
+	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
+	    	        dataType: 'jsonp',
+	    	        data: {
+	    	            client_current_question_order: client_current_question_order
+	    	        },
+	    	        success: function(json) {
+	    	            if (json.statusCode == 1) {
+	    	                //next question
+	    	                loadNextQuestionOnly();
+	    	                alert("This question has been already answered by another one, you will be answered other question");
+	    	            } else if (json.statusCode == 0) {}
+	    	        },
+	    	        error: function() {
+	    	            alert("Error2");
+	    	        }
+	    	    });
+	    	};
+	    	 //countdownTimer2 = setInterval('frequentlyChecking()', 3000);
+    </script>
+    </div>
 </body>
 </html>
