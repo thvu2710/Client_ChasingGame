@@ -106,30 +106,8 @@
     </div>
     <script>
 	document.addEventListener("deviceReady", deviceReady, false);
-
-
 	function deviceReady() {
-		document.addEventListener("pagebeforehide", function (e) {
-			alert("pagebeforehide");
-		}, false );
-		document.addEventListener("pagehide", function (e) {
-			alert("pagehide");
-		}, false );
-		document.addEventListener("pause", onPause, false);
-
-		function onPause(){
-		alert("onpause");
-		//handle the pause event
-		
-		}
-		document.addEventListener("resume", onResume, false);
-
-		function onResume(){
-			alert("onresume");
-		//handle the resume event
-
-		}		
-		alert("device ready 50");
+		alert("device ready 55");
 		
 	    $("#exit").bind("click", function(event) {
 	        navigator.app.exitApp();
