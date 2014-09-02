@@ -134,7 +134,7 @@ Loading Question...
 	    	var countdownTimer2;
 	    	var checkGetResponse = false;
 	    	var room_id = sessionStorage.getItem("room_id");
-	    
+
 	    	function secondPassed() {
 	    	    var minutes = Math.round((seconds - 30) / 60);
 	    	    var remainingSeconds = seconds % 60;
@@ -184,8 +184,8 @@ Loading Question...
 	    	 //get current question and answer that user input
 	    	 //load question for next
 	    	loadNextQuestion = function() {
-	    		$("#next_question").removeClass("ui-enabled");
-			$("#next_question").addClass("ui-disabled");
+	    	    $("#next_question").removeClass("ui-enabled");
+	    	    $("#next_question").addClass("ui-disabled");
 	    	    var question_info = {
 	    	        email: sessionStorage.getItem("email"),
 	    	        current_question_order: client_current_question_order,
@@ -197,8 +197,8 @@ Loading Question...
 	    	        dataType: 'jsonp',
 	    	        data: question_info,
 	    	        success: function(json) {
-	    	        	$("#next_question").removeClass("ui-disabled");
-				$("#next_question").addClass("ui-enabled");
+	    	            $("#next_question").removeClass("ui-disabled");
+	    	            $("#next_question").addClass("ui-enabled");
 	    	            if (json.statusCode == 3) {
 	    	                clearInterval(countdownTimer);
 	    	                clearInterval(countdownTimer2);
@@ -220,8 +220,8 @@ Loading Question...
 	    	            checkGetResponse = false;
 	    	        },
 	    	        error: function() {
-	    	        	$("#next_question").removeClass("ui-disabled");
-				$("#next_question").addClass("ui-enabled");
+	    	            $("#next_question").removeClass("ui-disabled");
+	    	            $("#next_question").addClass("ui-enabled");
 	    	            alert("Cannot connect to server");
 	    	        }
 	    	    });
@@ -271,7 +271,7 @@ Loading Question...
 	    	});
 	    	loadFirstQuestion();
 	    	var i = 0;
-	    
+
 	    	function frequentlyChecking() {
 	    	    $.ajax({
 	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
