@@ -196,6 +196,8 @@ Loading Question...
         	loadAllQuestion();
         
         	function sendAnswer() {
+        	    $("#next_question").removeClass("ui-enabled");
+                $("#next_question").addClass("ui-disabled");
         	    $.ajax({
         	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
         	        dataType: 'jsonp',
@@ -204,6 +206,8 @@ Loading Question...
         	            email: sessionStorage.getItem("email")
         	        },
         	        success: function(json) {
+        	            $("#next_question").removeClass("ui-disabled");
+                        $("#next_question").addClass("ui-enabled");
         	            if (json.statusCode == 0) {
         	                clearInterval(countdownTimer);
         	                //window.location = "result.html?id=" + json.parameters[0];
@@ -216,6 +220,10 @@ Loading Question...
         	                window.location = "home.html";
         	            }
         	            checkGetResponse = false;
+        	        } error: function() {
+        	            alert("Cannot connect to server");
+        	            $("#next_question").removeClass("ui-disabled");
+                        $("#next_question").addClass("ui-enabled");
         	        }
         	    });
         	}
