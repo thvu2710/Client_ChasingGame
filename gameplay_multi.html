@@ -125,171 +125,174 @@ Loading Question...
             <h1>Mistake Chasing Game (c) 2013</h1>
         </div>
         <script>
-	    	var total_my_question = 0;
-	    	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
-	    	var seconds = 300;
-	    	var countdownTimer;
-	    	var countdownTimer2;
-	    	var checkGetResponse = false;
-	    	var room_id = sessionStorage.getItem("room_id");
-
-	    	function secondPassed() {
-	    	    var minutes = Math.round((seconds - 30) / 60);
-	    	    var remainingSeconds = seconds % 60;
-	    	    if (remainingSeconds < 10) {
-	    	        remainingSeconds = "0" + remainingSeconds;
-	    	    }
-	    	    if (minutes < 10) {
-	    	        minutes = "0" + minutes;
-	    	    }
-	    	    $(".minutes").text(minutes);
-	    	    $(".seconds").text(remainingSeconds);
-	    	    if (seconds == 0) {
-	    	        clearInterval(countdownTimer);
-	    	        window.location = "result_multi.html";
-	    	        sessionStorage.setItem("total", total_my_question);
-	    	    } else {
-	    	        seconds--;
-	    	    }
-	    	};
-	    	 //first load question after showing gameplay page
-	    	loadFirstQuestion = function() {
-	    	    var question_info = {
-	    	        email: sessionStorage.getItem("email"),
-	    	        room_id: room_id
-	    	    };
-	    	    $.ajax({
-	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
-	    	        dataType: 'jsonp',
-	    	        data: question_info,
-	    	        success: function(json) {
-	    	            var question = json.parameters[0];
-	    	            client_current_question_order = question.id;
-	    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
-	    	            $("#question").text(question.question);
-	    	            var str = question.answer_list.split(" ");
-	    	            for (var i = 0; i < str.length; i++) {
-	    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-	    	            }
-	    	            $("#select").selectmenu("refresh", true);
-	    	            countdownTimer = setInterval('secondPassed()', 1000);
-	    	        },
-	    	        error: function() { //khoi tao lan dau bi loi, hoac reset lai session browser cung bi loi
-	    	            alert("Error0");
-	    	        }
-	    	    });
-	    	};
-	    	 //get current question and answer that user input
-	    	 //load question for next
-	    	loadNextQuestion = function() {
-	    	    $("#next_question").removeClass("ui-enabled");
-	    	    $("#next_question").addClass("ui-disabled");
-	    	    var question_info = {
-	    	        email: sessionStorage.getItem("email"),
-	    	        current_question_order: client_current_question_order,
-	    	        answer: $("#select").val(),
-	    	        room_id: room_id
-	    	    };
-	    	    $.ajax({
-	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
-	    	        dataType: 'jsonp',
-	    	        data: question_info,
-	    	        success: function(json) {
-	    	            $("#next_question").removeClass("ui-disabled");
-	    	            $("#next_question").addClass("ui-enabled");
-	    	            if (json.statusCode == 3) {
-	    	                clearInterval(countdownTimer);
-	    	                clearInterval(countdownTimer2);
-	    	                window.location = "result_multi.html";
-	    	                sessionStorage.setItem("total", total_my_question);
-	    	                checkGetResponse = false;
-	    	                return;
-	    	            }
-	    	            var question = json.parameters[0];
-	    	            client_current_question_order = question.id;
-	    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
-	    	            $("#question").text(question.question);
-	    	            var str = question.answer_list.split(" ");
-	    	            $("#select").html("");
-	    	            for (var i = 0; i < str.length; i++) {
-	    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-	    	            }
-	    	            $("#select").selectmenu("refresh", true);
-	    	            checkGetResponse = false;
-	    	        },
-	    	        error: function() {
-	    	            $("#next_question").removeClass("ui-disabled");
-	    	            $("#next_question").addClass("ui-enabled");
-	    	            alert("Cannot connect to server");
-	    	        }
-	    	    });
-	    	};
-	    	 //load next question only
-	    	loadNextQuestionOnly = function() {
-	    	    var question_info = {
-	    	        email: sessionStorage.getItem("email"),
-	    	        current_question_order: client_current_question_order,
-	    	        room_id: room_id
-	    	    };
-	    	    $.ajax({
-	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
-	    	        dataType: 'jsonp',
-	    	        data: question_info,
-	    	        success: function(json) {
-	    	            if (json.parameters[0].length == 0) {
-	    	                clearInterval(countdownTimer);
-	    	                clearInterval(countdownTimer2);
-	    	                window.location = "result_multi.html";
-	    	                sessionStorage.setItem("total", total_my_question);
-	    	                checkGetResponse = false;
-	    	                return;
-	    	            }
-	    	            var question = json.parameters[0];
-	    	            client_current_question_order = question.id;
-	    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
-	    	            $("#question").text(question.question);
-	    	            var str = question.answer_list.split(" ");
-	    	            $("#select").html("");
-	    	            for (var i = 0; i < str.length; i++) {
-	    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
-	    	            }
-	    	            $("#select").selectmenu("refresh", true);
-	    	            checkGetResponse = false;
-	    	        },
-	    	        error: function() {
-	    	            alert("Error1");
-	    	        }
-	    	    });
-	    	};
-	    	$("#next_question").bind("click", function() {
-	    	    if (checkGetResponse == false) {
-	    	        checkGetResponse = true;
-	    	        loadNextQuestion();
-	    	    }
-	    	});
-	    	loadFirstQuestion();
-	    	var i = 0;
-
-	    	function frequentlyChecking() {
-	    	    $.ajax({
-	    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
-	    	        dataType: 'jsonp',
-	    	        data: {
-	    	            client_current_question_order: client_current_question_order
-	    	        },
-	    	        success: function(json) {
-	    	            if (json.statusCode == 1) {
-	    	                //next question
-	    	                loadNextQuestionOnly();
-	    	                alert("This question has been already answered by another one, you will be answered other question");
-	    	            } else if (json.statusCode == 0) {}
-	    	        },
-	    	        error: function() {
-	    	            alert("Error2");
-	    	        }
-	    	    });
-	    	};
-	    	 countdownTimer2 = setInterval('frequentlyChecking()', 3000);
+        document.addEventListener("deviceReady", deviceReady, false);
+		function deviceReady() {
+		    	var total_my_question = 0;
+		    	var client_current_question_order = 1; //it is correspond to auto_id in question_list (initual value = 1, not 0)
+		    	var seconds = 300;
+		    	var countdownTimer;
+		    	var countdownTimer2;
+		    	var checkGetResponse = false;
+		    	var room_id = sessionStorage.getItem("room_id");
+	
+		    	function secondPassed() {
+		    	    var minutes = Math.round((seconds - 30) / 60);
+		    	    var remainingSeconds = seconds % 60;
+		    	    if (remainingSeconds < 10) {
+		    	        remainingSeconds = "0" + remainingSeconds;
+		    	    }
+		    	    if (minutes < 10) {
+		    	        minutes = "0" + minutes;
+		    	    }
+		    	    $(".minutes").text(minutes);
+		    	    $(".seconds").text(remainingSeconds);
+		    	    if (seconds == 0) {
+		    	        clearInterval(countdownTimer);
+		    	        window.location = "result_multi.html";
+		    	        sessionStorage.setItem("total", total_my_question);
+		    	    } else {
+		    	        seconds--;
+		    	    }
+		    	};
+		    	 //first load question after showing gameplay page
+		    	loadFirstQuestion = function() {
+		    	    var question_info = {
+		    	        email: sessionStorage.getItem("email"),
+		    	        room_id: room_id
+		    	    };
+		    	    $.ajax({
+		    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/game_starter",
+		    	        dataType: 'jsonp',
+		    	        data: question_info,
+		    	        success: function(json) {
+		    	            var question = json.parameters[0];
+		    	            client_current_question_order = question.id;
+		    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
+		    	            $("#question").text(question.question);
+		    	            var str = question.answer_list.split(" ");
+		    	            for (var i = 0; i < str.length; i++) {
+		    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+		    	            }
+		    	            $("#select").selectmenu("refresh", true);
+		    	            countdownTimer = setInterval('secondPassed()', 1000);
+		    	        },
+		    	        error: function() { //khoi tao lan dau bi loi, hoac reset lai session browser cung bi loi
+		    	            alert("Error0");
+		    	        }
+		    	    });
+		    	};
+		    	 //get current question and answer that user input
+		    	 //load question for next
+		    	loadNextQuestion = function() {
+		    	    $("#next_question").removeClass("ui-enabled");
+		    	    $("#next_question").addClass("ui-disabled");
+		    	    var question_info = {
+		    	        email: sessionStorage.getItem("email"),
+		    	        current_question_order: client_current_question_order,
+		    	        answer: $("#select").val(),
+		    	        room_id: room_id
+		    	    };
+		    	    $.ajax({
+		    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay",
+		    	        dataType: 'jsonp',
+		    	        data: question_info,
+		    	        success: function(json) {
+		    	            $("#next_question").removeClass("ui-disabled");
+		    	            $("#next_question").addClass("ui-enabled");
+		    	            if (json.statusCode == 3) {
+		    	                clearInterval(countdownTimer);
+		    	                clearInterval(countdownTimer2);
+		    	                window.location = "result_multi.html";
+		    	                sessionStorage.setItem("total", total_my_question);
+		    	                checkGetResponse = false;
+		    	                return;
+		    	            }
+		    	            var question = json.parameters[0];
+		    	            client_current_question_order = question.id;
+		    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
+		    	            $("#question").text(question.question);
+		    	            var str = question.answer_list.split(" ");
+		    	            $("#select").html("");
+		    	            for (var i = 0; i < str.length; i++) {
+		    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+		    	            }
+		    	            $("#select").selectmenu("refresh", true);
+		    	            checkGetResponse = false;
+		    	        },
+		    	        error: function() {
+		    	            $("#next_question").removeClass("ui-disabled");
+		    	            $("#next_question").addClass("ui-enabled");
+		    	            alert("Cannot connect to server");
+		    	        }
+		    	    });
+		    	};
+		    	 //load next question only
+		    	loadNextQuestionOnly = function() {
+		    	    var question_info = {
+		    	        email: sessionStorage.getItem("email"),
+		    	        current_question_order: client_current_question_order,
+		    	        room_id: room_id
+		    	    };
+		    	    $.ajax({
+		    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/gameplay_getnextonly",
+		    	        dataType: 'jsonp',
+		    	        data: question_info,
+		    	        success: function(json) {
+		    	            if (json.parameters[0].length == 0) {
+		    	                clearInterval(countdownTimer);
+		    	                clearInterval(countdownTimer2);
+		    	                window.location = "result_multi.html";
+		    	                sessionStorage.setItem("total", total_my_question);
+		    	                checkGetResponse = false;
+		    	                return;
+		    	            }
+		    	            var question = json.parameters[0];
+		    	            client_current_question_order = question.id;
+		    	            $("#question_number").text("Question: " + (++total_my_question) + "/10");
+		    	            $("#question").text(question.question);
+		    	            var str = question.answer_list.split(" ");
+		    	            $("#select").html("");
+		    	            for (var i = 0; i < str.length; i++) {
+		    	                $("#select").append("<option value=" + str[i] + ">" + str[i] + "</option>");
+		    	            }
+		    	            $("#select").selectmenu("refresh", true);
+		    	            checkGetResponse = false;
+		    	        },
+		    	        error: function() {
+		    	            alert("Error1");
+		    	        }
+		    	    });
+		    	};
+		    	$("#next_question").bind("click", function() {
+		    	    if (checkGetResponse == false) {
+		    	        checkGetResponse = true;
+		    	        loadNextQuestion();
+		    	    }
+		    	});
+		    	loadFirstQuestion();
+		    	var i = 0;
+	
+		    	function frequentlyChecking() {
+		    	    $.ajax({
+		    	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/temp_play_history",
+		    	        dataType: 'jsonp',
+		    	        data: {
+		    	            client_current_question_order: client_current_question_order
+		    	        },
+		    	        success: function(json) {
+		    	            if (json.statusCode == 1) {
+		    	                //next question
+		    	                loadNextQuestionOnly();
+		    	                alert("This question has been already answered by another one, you will be answered other question");
+		    	            } else if (json.statusCode == 0) {}
+		    	        },
+		    	        error: function() {
+		    	            alert("Error2");
+		    	        }
+		    	    });
+		    	};
+		    	 countdownTimer2 = setInterval('frequentlyChecking()', 3000);
+		}
     </script>
     </div>
 </body>
