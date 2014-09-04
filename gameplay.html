@@ -155,7 +155,8 @@ Loading Question...
         	    $(".seconds").text(remainingSeconds);
         	    if (seconds == 0) {
         	        clearInterval(countdownTimer);
-        	        $.mobile.changePage("result.html");
+        	        //$.mobile.changePage("result.html");
+        	        sendAnswer();
         	    } else {
         	        seconds--;
         	    }
