@@ -198,10 +198,11 @@ Loading Question...
         	function sendAnswer() {
         	    $("#next_question").removeClass("ui-enabled");
                 $("#next_question").addClass("ui-disabled");
-                alert("data: " + totalanswer_string);
+
                 if (totalanswer_string.length == 0) {
                   totalanswer_string = ",";
                 }
+                                alert("data: " + totalanswer_string + ", length " + totalanswer_string.length);
         	    $.ajax({
         	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
         	        dataType: 'jsonp',
