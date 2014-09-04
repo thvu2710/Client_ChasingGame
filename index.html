@@ -107,9 +107,6 @@
     <script>
 	document.addEventListener("deviceReady", deviceReady, false);
 	function deviceReady() {
-		document.addEventListener("backbutton", function (e) {
-			//dont prevent back button
-		}, false );
 	    $("#exit").bind("click", function(event) {
 	        navigator.app.exitApp();
 	    });
