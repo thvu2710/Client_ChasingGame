@@ -169,6 +169,8 @@
     <script>
         document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady() {
+		document.addEventListener("backbutton", function (e) {
+	}, false );
 
 	    var user_info = {
 	        email: sessionStorage.getItem("email")
