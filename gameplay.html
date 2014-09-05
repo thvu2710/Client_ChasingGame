@@ -124,16 +124,22 @@ Loading Question...
             <h1>Mistake Chasing Game (c) 2014</h1>
         </div>
         <script>
-    	    document.addEventListener("deviceready", onDeviceReady, false);
-        	function onDeviceReady() {
-                var mp3file = new Media("https://raw.githubusercontent.com/thvu2710/Client_ChasingGame/master/clock_tick2.mp3",
-                        function() {
-                        },
-                        function(err) {
-                        }
-                        );
-                mp3file.play();
-        	}
+             document.addEventListener("deviceready", onDeviceReady, false);
+             var my_media = null;
+             function onDeviceReady() {
+                 //playAudio("/android_asset/www/audio/audio.mp3");
+                 playAudio("https://raw.githubusercontent.com/thvu2710/Client_ChasingGame/master/clock_tick2.mp3");
+             }
+           	function playAudio(src) {
+                my_media = new Media(src, null, null, onStatus);
+                my_media.play();
+            }
+           // onStatus Callback 
+           function onStatus(status) {
+               if( status==Media.MEDIA_STOPPED ) {
+               	my_media.play();
+               }
+           }
         	var countdownTimer;
         	var seconds = 300;
         
