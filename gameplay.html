@@ -140,7 +140,7 @@ Loading Question...
                       mp3file.play();
         	} */
         	var countdownTimer;
-        	var seconds = 10;
+        	var seconds = 300;
         
         	function secondPassed() {
         	    var minutes = Math.round((seconds - 30) / 60);
@@ -202,7 +202,6 @@ Loading Question...
                 if (totalanswer_string.length == 0) {
                   totalanswer_string = ",";
                 }
-                                alert("data: " + totalanswer_string + ", length " + totalanswer_string.length);
         	    $.ajax({
         	        url: "http://mistakechasinggame-hcmuaf.rhcloud.com/rest/webservice/single_play",
         	        dataType: 'jsonp',
